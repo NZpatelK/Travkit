@@ -3,7 +3,7 @@ import Image from "next/image";
 import ProgressBar from "./ProgessBar";
 export default function Checklist() {
     return (
-        <div className="flex flex-col max-w-2xl w-full bg-neutral-100 h-full max-h-[600px] rounded-2xl shadow-2xl">
+        <div className="flex flex-col max-w-2xl w-full bg-neutral-100 h-full max-h-[600px] rounded-2xl shadow-2xl m-5">
             <div className="relative h-35 overlay">
                 <Image
                     src="/bg-image.jpg"
