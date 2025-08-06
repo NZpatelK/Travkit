@@ -18,11 +18,11 @@ export default function Checklist() {
                     Prepare trip to Dubai in 2025
                 </h3>
                 <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 z-20 w-3/5">
-                    <ProgressBar progressNum={100}/>
+                    <ProgressBar progressNum={100} />
                 </div>
-                <div>
-                    <ExpandableList/>
-                </div>
+            </div>
+            <div className="flex flex-col mt-10 items-center w-full relative">
+                <ExpandableList />
             </div>
         </div>
 
