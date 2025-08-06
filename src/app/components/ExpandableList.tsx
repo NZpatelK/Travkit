@@ -32,7 +32,7 @@ export default function ExpandableList() {
     return (
         <div className="w-11/12 mx-auto my-4">
             {items.map((item: ListItem, index: number) => (
-                <div key={index} className="border-2 border-rose-400 rounded-lg mb-2 overflow-hidden">
+                <div key={index} className="border-2 border-rose-400 rounded-lg mb-2 overflow-hidden shadow-md">
                     <button
                         className="w-full text-left p-4 bg-rose-100 hover:bg-rose-200 transition-colors flex justify-between items-center"
                         onClick={() => toggleItem(index)}
