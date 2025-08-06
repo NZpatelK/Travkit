@@ -58,6 +58,8 @@ export default function ExpandableList() {
                             >
                                 <div className="p-4 bg-white">
                                     <List />
+                                    <List />
+                                    <List />
                                 </div>
                             </motion.div>
                         )}
