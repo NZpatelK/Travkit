@@ -2,6 +2,8 @@
 import Image from "next/image";
 import ProgressBar from "./ProgessBar";
 import ExpandableList from "./ExpandableList";
+
+
 export default function Checklist() {
     return (
         <div className="flex flex-col max-w-2xl w-full bg-neutral-100 min-h-[600px] rounded-2xl shadow-2xl m-5">

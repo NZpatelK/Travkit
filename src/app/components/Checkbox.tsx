@@ -3,8 +3,13 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 
-export default function Checkbox() {
-    const [isChecked, setIsChecked] = useState(false);
+interface CheckboxProps {
+    isChecked: boolean;
+    setIsChecked: (checked: boolean) => void;
+}
+
+export default function Checkbox({ isChecked, setIsChecked }: CheckboxProps) {
+    // const [isChecked, setIsChecked] = useState(false);
 
     const handleToggle = () => {
         setIsChecked(!isChecked);
