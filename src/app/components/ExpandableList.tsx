@@ -107,7 +107,7 @@ export default function ExpandableList() {
                         </div>
                     </button>
                     <div
-                        ref={(el) => (listRefs.current[index] = el)}
+                        ref={(el) => { listRefs.current[index] = el; }}
                         className="overflow-hidden"
                     >
                         <div className="p-4 bg-white">
