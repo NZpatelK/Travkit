@@ -2,13 +2,18 @@
 import Image from "next/image";
 import Checklist from "./components/Checklist";
 import { useEffect } from "react";
-import { seedDataIfEmpty } from "./utils/seedData";
+import { clearAllData, seedDataIfEmpty } from "./utils/seedData";
 
 export default function Home() {
 
   useEffect(() => {
-    seedDataIfEmpty();
+    // seedDataIfEmpty();
   })
+
+  const handleClearList = () => {
+    clearAllData();
+    alert('List cleared!');
+  };
 
   return (
     <div className="h-screen flex flex-col">
@@ -18,6 +23,7 @@ export default function Home() {
 
       <div className="flex-grow flex items-center justify-center">
         <Checklist />
+        <button onClick={handleClearList}>Clear</button>
       </div>
     </div>
 
