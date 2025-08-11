@@ -1,54 +1,74 @@
 import { supabase } from '@/app/utils/supabase/client';
+import seedData from '@/app/data/travel.json'; // replace with your actual path
 
-// Dynamic import based on template name
-export async function seedDataIfEmpty(templateName: string) {
-  // Import JSON file dynamically
-  let seedData;
+export async function seedDataIfEmpty() {
   try {
-    seedData = (await import(`@/data/templates/${templateName}.json`)).default;
-  } catch {
-    throw new Error(`Template "${templateName}" not found.`);
-  }
+    // Dynamic import if you want based on templateName (optional)
+    // const seedData = (await import(`@/data/templates/${templateName}.json`)).default;
 
-  // Check if both tables are empty
-  const { count: catCount } = await supabase
-    .from('categories')
-    .select('id', { count: 'exact', head: true });
-
-  const { count: listCount } = await supabase
-    .from('list')
-    .select('id', { count: 'exact', head: true });
-
-  if ((catCount ?? 0) === 0 && (listCount ?? 0) === 0) {
-    // Insert categories
-    const { data: categories, error: catError } = await supabase
+    // Check if tables are empty
+    const { count: catCount, error: catCountError } = await supabase
       .from('categories')
-      .insert(seedData.categories)
-      .select();
+      .select('id', { count: 'exact', head: true });
 
-    if (catError) throw catError;
-
-    // Map category title to ID
-    const categoryMap = categories.reduce((acc, cat) => {
-      acc[cat.title] = cat.id;
-      return acc;
-    }, {} as Record<string, string>);
-
-    // Insert list items with category_id
-    const listWithIds = seedData.list.map(item => ({
-      title: item.title,
-      isCompleted: item.isCompleted,
-      category_id: categoryMap[item.category]
-    }));
-
-    const { error: listError } = await supabase
+    const { count: listCount, error: listCountError } = await supabase
       .from('list')
-      .insert(listWithIds);
+      .select('id', { count: 'exact', head: true });
 
-    if (listError) throw listError;
+    if (catCountError) throw new Error(`Error counting categories: ${JSON.stringify(catCountError)}`);
+    if (listCountError) throw new Error(`Error counting list items: ${JSON.stringify(listCountError)}`);
 
-    return { seeded: true, template: templateName };
+    if ((catCount ?? 0) === 0 && (listCount ?? 0) === 0) {
+      // Prepare categories insert payload
+      const categoryInsertPayload = seedData.categories.map(c => ({
+        title: c.categoryName,
+      }));
+
+      console.log('Seeding categories:', categoryInsertPayload);
+
+      // Insert categories
+      const { data: categories, error: catError } = await supabase
+        .from('categories')
+        .insert(categoryInsertPayload)
+        .select();
+
+      console.log('Categories inserted:', categories, 'Error:', catError);
+
+      if (catError) throw new Error(`Category insert error: ${JSON.stringify(catError)}`);
+
+      // Map categoryName -> id
+      const categoryMap = categories.reduce((acc, cat) => {
+        acc[cat.title] = cat.id;
+        return acc;
+      }, {} as Record<string, string>);
+
+      // Prepare list insert payload by flattening all nested lists
+      const listInsertPayload = seedData.categories.flatMap(category =>
+        category.list.map(item => ({
+          title: item.name,
+          iscompleted: false,
+          category_id: categoryMap[category.categoryName],
+        }))
+      );
+
+      console.log('Seeding list items:', listInsertPayload);
+
+      // Insert list items
+      const { error: listError } = await supabase
+        .from('list')
+        .insert(listInsertPayload);
+
+      console.log('List insert error:', listError);
+
+      if (listError) throw new Error(`List insert error: ${JSON.stringify(listError)}`);
+
+      return { seeded: true };
+    }
+
+    return { seeded: false };
+  } catch (err) {
+    // Re-throw error for upper layers to catch/display
+    if (err instanceof Error) throw err;
+    else throw new Error(JSON.stringify(err));
   }
-
-  return { seeded: false, template: templateName };
 }

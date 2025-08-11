@@ -1,0 +1,49 @@
+{
+  "categories": [
+    {
+      "categoryName": "plane",
+      "list": [
+        { "name": "boarding pass" },
+        { "name": "luggage" },
+        { "name": "in-flight entertainment" },
+        { "name": "travel pillow" }
+      ]
+    },
+    {
+      "categoryName": "bus",
+      "list": [
+        { "name": "bus ticket" },
+        { "name": "bus stop" },
+        { "name": "seat reservation" },
+        { "name": "travel schedule" }
+      ]
+    },
+    {
+      "categoryName": "tourist spot",
+      "list": [
+        { "name": "museum" },
+        { "name": "historical monument" },
+        { "name": "national park" },
+        { "name": "beach" }
+      ]
+    },
+    {
+      "categoryName": "clothe",
+      "list": [
+        { "name": "jacket" },
+        { "name": "t-shirt" },
+        { "name": "hiking boots" },
+        { "name": "hat" }
+      ]
+    },
+    {
+      "categoryName": "pack",
+      "list": [
+        { "name": "backpack" },
+        { "name": "toiletries" },
+        { "name": "first aid kit" },
+        { "name": "charger" }
+      ]
+    }
+  ]
+}
