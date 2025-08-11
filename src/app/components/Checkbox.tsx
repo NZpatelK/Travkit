@@ -1,28 +1,20 @@
 'use client';
-
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
 
 interface CheckboxProps {
     isChecked: boolean;
-    setIsChecked: (checked: boolean) => void;
 }
 
-export default function Checkbox({ isChecked, setIsChecked }: CheckboxProps) {
-    // const [isChecked, setIsChecked] = useState(false);
-
-    const handleToggle = () => {
-        setIsChecked(!isChecked);
-    };
+export default function Checkbox({ isChecked }: CheckboxProps) {
 
     return (
-        <div className="relative cursor-pointer" onClick={handleToggle}>
+        <div className="relative cursor-pointer">
             <input
                 type="checkbox"
                 className="sr-only"
                 checked={isChecked}
                 onChange={() => {}} // required for React controlled input
-                readOnly // since we’re using onClick to toggle state
+                readOnly 
             />
             <motion.div
                 className="w-4 h-4 border-2 rounded-md flex items-center justify-center"
