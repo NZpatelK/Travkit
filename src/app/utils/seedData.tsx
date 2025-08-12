@@ -76,24 +76,33 @@ export async function seedDataIfEmpty() {
 
 
 export async function clearAllData() {
-  // Delete from list first (FK to categories)
-  const { error: listError } = await supabase
-    .from('list')
-    .delete()
-    .not('id', 'is', null);
+  // Helper: check if table has data
+  const hasData = async (table) => {
+    const { data, error } = await supabase.from(table).select('id').limit(1);
+    if (error) throw new Error(`Error checking ${table}: ${JSON.stringify(error)}`);
+    return data && data.length > 0;
+  };
 
-  if (listError) {
-    throw new Error(`Error clearing list table: ${JSON.stringify(listError)}`);
+  // Helper: delete all rows from a table
+  const deleteAll = async (table) => {
+    const { error } = await supabase.from(table).delete().not('id', 'is', null);
+    if (error) throw new Error(`Error clearing ${table}: ${JSON.stringify(error)}`);
+
+    // Verify it's empty
+    const stillHasData = await hasData(table);
+    if (stillHasData) {
+      throw new Error(`Data still present in ${table} after delete`);
+    }
+  };
+
+  // Clear list table first (FK to categories)
+  if (await hasData('list')) {
+    await deleteAll('list');
   }
 
-  // Then delete from categories
-  const { error: catError } = await supabase
-    .from('categories')
-    .delete()
-    .not('id', 'is', null);
-
-  if (catError) {
-    throw new Error(`Error clearing categories table: ${JSON.stringify(catError)}`);
+  // Then clear categories
+  if (await hasData('categories')) {
+    await deleteAll('categories');
   }
 
   return { cleared: true };

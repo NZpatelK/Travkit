@@ -7,12 +7,11 @@ import { clearAllData, seedDataIfEmpty } from "./utils/seedData";
 export default function Home() {
 
   useEffect(() => {
-    // seedDataIfEmpty();
+    seedDataIfEmpty();
   })
 
   const handleClearList = () => {
     clearAllData();
-    alert('List cleared!');
   };
 
   return (
