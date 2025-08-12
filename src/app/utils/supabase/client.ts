@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import toast from 'react-hot-toast';
 
 export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -10,7 +11,7 @@ export async function getCategoriesWithLists() {
     .from('categories')
     .select('id, title, list(id, title, iscompleted)');
 
-  if (error) throw error;
+  if (error) toast.error(error.message);
   return data;
 }
 
@@ -20,7 +21,8 @@ export async function addCategory(title: string) {
     .insert([{ title }])
     .select();
 
-  if (error) throw error;
+  if (error) toast.error(error.message);
+  toast.success('Category added successfully');
   return data;
 }
 
@@ -30,7 +32,7 @@ export async function addListItem(title: string, categoryId: string) {
     .insert([{ title, category_id: categoryId, isCompleted: false }])
     .select();
 
-  if (error) throw error;
+  if (error) toast.error(error.message);
   return data;
 }
 
@@ -41,6 +43,6 @@ export async function updateIsCompleted(id: string | number, iscompleted: boolea
     .update({ iscompleted }) 
     .eq('id', id)
 
-  if (error) throw error;
+  if (error) toast.error(error.message);
   return data;
 }

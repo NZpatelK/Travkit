@@ -88,6 +88,11 @@ export default function ExpandableList() {
         });
     }, [categoriesWithLists.length]);
 
+    const calculateTotalCompleted = (category) => {
+        const totalCompleted = category.list.filter((list) => list.iscompleted).length;
+        return totalCompleted;
+    }
+
     return (
         <div className="w-11/12 mx-auto my-4">
             {categoriesWithLists.map((category, index) => (
@@ -103,7 +108,7 @@ export default function ExpandableList() {
                         <div className="flex items-center">
                             <div className="bg-white rounded-full p-1 px-4 mr-4 flex items-center justify-center">
                                 <span className="text-rose-600 text-xs font-semibold">
-                                    0 / {category.list.length}
+                                  {calculateTotalCompleted(category)}   / {category.list.length}
                                 </span>
                             </div>
                             <span className="text-rose-600">{expandedItems[index] ? '−' : '+'}</span>
