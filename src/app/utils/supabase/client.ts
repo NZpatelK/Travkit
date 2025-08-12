@@ -33,3 +33,14 @@ export async function addListItem(title: string, categoryId: string) {
   if (error) throw error;
   return data;
 }
+
+
+export async function updateIsCompleted(id: string | number, iscompleted: boolean) {
+  const { data, error } = await supabase
+    .from('list')
+    .update({ iscompleted }) 
+    .eq('id', id)
+
+  if (error) throw error;
+  return data;
+}

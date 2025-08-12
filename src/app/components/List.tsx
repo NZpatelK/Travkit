@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Checkbox from "./Checkbox";
+import { updateIsCompleted } from "../utils/supabase/client";
 
 interface ListProps {
   id: number | string;
@@ -11,6 +12,7 @@ export default function List({ id, title, iscompleted }: ListProps) {
     const [isChecked, setIsChecked] = useState(iscompleted);
 
     const handleToggle = () => {
+        updateIsCompleted(id, !isChecked);
         setIsChecked(!isChecked);
     };
 
