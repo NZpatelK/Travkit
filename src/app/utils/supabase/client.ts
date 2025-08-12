@@ -8,7 +8,7 @@ export const supabase = createClient(
 export async function getCategoriesWithLists() {
   const { data, error } = await supabase
     .from('categories')
-    .select('id, title, list(id, title, isCompleted)');
+    .select('id, title, list(id, title, iscompleted)');
 
   if (error) throw error;
   return data;
