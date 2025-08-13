@@ -17,11 +17,15 @@ export default function ExpandableList() {
 
     useEffect(() => {
         const fetchCategoriesWithLists = async () => {
-            const data = await getCategoriesWithLists();
-            setCategoriesWithLists(data);
+            await fetchCategoriesWithListsData();
         };
         fetchCategoriesWithLists();
     }, []);
+
+    const fetchCategoriesWithListsData = async () => {
+        const data = await getCategoriesWithLists();
+        setCategoriesWithLists(data);
+    };
 
     const toggleItem = (index: number) => {
         setExpandedItems((prev) => {
@@ -78,7 +82,7 @@ export default function ExpandableList() {
 
     // Sync refs with categories
     useEffect(() => {
-        listRefs.current = listRefs.current.slice(0, categoriesWithLists.length);
+        listRefs.current = listRefs.current.slice(0, categoriesWithLists?.length);
 
         // Hide all by default
         listRefs.current.forEach((ref) => {
@@ -86,16 +90,16 @@ export default function ExpandableList() {
                 gsap.set(ref, { display: 'none', height: 0, opacity: 0 });
             }
         });
-    }, [categoriesWithLists.length]);
+    }, [categoriesWithLists?.length]);
 
     const calculateTotalCompleted = (category) => {
-        const totalCompleted = category.list.filter((list) => list.iscompleted).length;
+        const totalCompleted = category.list.filter((list) => list.is_completed).length;
         return totalCompleted;
     }
 
     return (
         <div className="w-11/12 mx-auto my-4">
-            {categoriesWithLists.map((category, index) => (
+            {categoriesWithLists?.map((category, index) => (
                 <div
                     key={category.id ?? index}
                     className="border-2 border-rose-400 rounded-lg mb-2 overflow-hidden shadow-md"
@@ -122,7 +126,7 @@ export default function ExpandableList() {
                     >
                         <div className="p-4 bg-white">
                             {category.list.map((listItem: any, i: number) => (
-                                <List key={listItem.id ?? i} {...listItem} />
+                                <List key={listItem.id ?? i} {...listItem} updateData={fetchCategoriesWithListsData} />
                             ))}
                         </div>
                     </div>

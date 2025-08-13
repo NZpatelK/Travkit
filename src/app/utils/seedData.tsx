@@ -3,9 +3,6 @@ import seedData from '@/app/data/travel.json'; // replace with your actual path
 
 export async function seedDataIfEmpty() {
   try {
-    // Dynamic import if you want based on templateName (optional)
-    // const seedData = (await import(`@/data/templates/${templateName}.json`)).default;
-
     // Check if tables are empty
     const { count: catCount, error: catCountError } = await supabase
       .from('categories')
@@ -19,9 +16,10 @@ export async function seedDataIfEmpty() {
     if (listCountError) throw new Error(`Error counting list items: ${JSON.stringify(listCountError)}`);
 
     if ((catCount ?? 0) === 0 && (listCount ?? 0) === 0) {
-      // Prepare categories insert payload
-      const categoryInsertPayload = seedData.categories.map(c => ({
+      // Prepare categories insert payload with order_by
+      const categoryInsertPayload = seedData.categories.map((c, catIndex) => ({
         title: c.categoryName,
+        order_by: catIndex + 1 // Add order number
       }));
 
       console.log('Seeding categories:', categoryInsertPayload);
@@ -42,12 +40,13 @@ export async function seedDataIfEmpty() {
         return acc;
       }, {} as Record<string, string>);
 
-      // Prepare list insert payload by flattening all nested lists
-      const listInsertPayload = seedData.categories.flatMap(category =>
-        category.list.map(item => ({
+      // Prepare list insert payload by flattening all nested lists with order_by
+      const listInsertPayload = seedData.categories.flatMap((category, catIndex) =>
+        category.list.map((item, itemIndex) => ({
           title: item.name,
-          iscompleted: false,
+          is_completed: false,
           category_id: categoryMap[category.categoryName],
+          order_by: itemIndex + 1 // Add order number for list items
         }))
       );
 
@@ -67,40 +66,32 @@ export async function seedDataIfEmpty() {
 
     return { seeded: false };
   } catch (err) {
-    // Re-throw error for upper layers to catch/display
     if (err instanceof Error) throw err;
     else throw new Error(JSON.stringify(err));
   }
 }
 
-
-
 export async function clearAllData() {
-  // Helper: check if table has data
-  const hasData = async (table) => {
+  const hasData = async (table: string) => {
     const { data, error } = await supabase.from(table).select('id').limit(1);
     if (error) throw new Error(`Error checking ${table}: ${JSON.stringify(error)}`);
     return data && data.length > 0;
   };
 
-  // Helper: delete all rows from a table
-  const deleteAll = async (table) => {
+  const deleteAll = async (table: string) => {
     const { error } = await supabase.from(table).delete().not('id', 'is', null);
     if (error) throw new Error(`Error clearing ${table}: ${JSON.stringify(error)}`);
 
-    // Verify it's empty
     const stillHasData = await hasData(table);
     if (stillHasData) {
       throw new Error(`Data still present in ${table} after delete`);
     }
   };
 
-  // Clear list table first (FK to categories)
   if (await hasData('list')) {
     await deleteAll('list');
   }
 
-  // Then clear categories
   if (await hasData('categories')) {
     await deleteAll('categories');
   }

@@ -5,15 +5,17 @@ import { updateIsCompleted } from "../utils/supabase/client";
 interface ListProps {
   id: number | string;
   title: string;
-  iscompleted: boolean;
+  is_completed: boolean;
+  updateData: () => void;
 }
 
-export default function List({ id, title, iscompleted }: ListProps) {
-    const [isChecked, setIsChecked] = useState(iscompleted);
+export default function List({ id, title, is_completed, updateData }: ListProps) {
+    const [isChecked, setIsChecked] = useState(is_completed);
 
-    const handleToggle = () => {
-        updateIsCompleted(id, !isChecked);
+    const handleToggle = async () => {
+        await updateIsCompleted(id, !isChecked);
         setIsChecked(!isChecked);
+        updateData();
     };
 
     return (

@@ -2,47 +2,52 @@
   "categories": [
     {
       "categoryName": "plane",
+      "orderBy": 1,
       "list": [
-        { "name": "boarding pass" },
-        { "name": "luggage" },
-        { "name": "in-flight entertainment" },
-        { "name": "travel pillow" }
+        { "name": "boarding pass", "orderBy": 1 },
+        { "name": "luggage", "orderBy": 2 },
+        { "name": "in-flight entertainment", "orderBy": 3 },
+        { "name": "travel pillow", "orderBy": 4 }
       ]
     },
     {
       "categoryName": "bus",
+      "orderBy": 2,
       "list": [
-        { "name": "bus ticket" },
-        { "name": "bus stop" },
-        { "name": "seat reservation" },
-        { "name": "travel schedule" }
+        { "name": "bus ticket", "orderBy": 1 },
+        { "name": "bus stop", "orderBy": 2 },
+        { "name": "seat reservation", "orderBy": 3 },
+        { "name": "travel schedule", "orderBy": 4 }
       ]
     },
     {
       "categoryName": "tourist spot",
+      "orderBy": 3,
       "list": [
-        { "name": "museum" },
-        { "name": "historical monument" },
-        { "name": "national park" },
-        { "name": "beach" }
+        { "name": "museum", "orderBy": 1 },
+        { "name": "historical monument", "orderBy": 2 },
+        { "name": "national park", "orderBy": 3 },
+        { "name": "beach", "orderBy": 4 }
       ]
     },
     {
       "categoryName": "clothe",
+      "orderBy": 4,
       "list": [
-        { "name": "jacket" },
-        { "name": "t-shirt" },
-        { "name": "hiking boots" },
-        { "name": "hat" }
+        { "name": "jacket", "orderBy": 1 },
+        { "name": "t-shirt", "orderBy": 2 },
+        { "name": "hiking boots", "orderBy": 3 },
+        { "name": "hat", "orderBy": 4 }
       ]
     },
     {
       "categoryName": "pack",
+      "orderBy": 5,
       "list": [
-        { "name": "backpack" },
-        { "name": "toiletries" },
-        { "name": "first aid kit" },
-        { "name": "charger" }
+        { "name": "backpack", "orderBy": 1 },
+        { "name": "toiletries", "orderBy": 2 },
+        { "name": "first aid kit", "orderBy": 3 },
+        { "name": "charger", "orderBy": 4 }
       ]
     }
   ]
