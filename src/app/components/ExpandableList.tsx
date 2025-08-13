@@ -10,7 +10,11 @@ interface ExpandedState {
     [key: number]: boolean;
 }
 
-export default function ExpandableList() {
+interface ExpandableListProps {
+    updatedProgress: () => void;
+}
+
+export default function ExpandableList({ updatedProgress }: ExpandableListProps) {
     const [expandedItems, setExpandedItems] = useState<ExpandedState>({});
     const [categoriesWithLists, setCategoriesWithLists] = useState<any[]>([]);
     const listRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -25,6 +29,7 @@ export default function ExpandableList() {
     const fetchCategoriesWithListsData = async () => {
         const data = await getCategoriesWithLists();
         setCategoriesWithLists(data);
+        updatedProgress();
     };
 
     const toggleItem = (index: number) => {
@@ -112,7 +117,7 @@ export default function ExpandableList() {
                         <div className="flex items-center">
                             <div className="bg-white rounded-full p-1 px-4 mr-4 flex items-center justify-center">
                                 <span className="text-rose-600 text-xs font-semibold">
-                                  {calculateTotalCompleted(category)}   / {category.list.length}
+                                    {calculateTotalCompleted(category)}   / {category.list.length}
                                 </span>
                             </div>
                             <span className="text-rose-600">{expandedItems[index] ? '−' : '+'}</span>

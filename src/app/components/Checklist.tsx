@@ -11,15 +11,19 @@ export default function Checklist() {
 
     useEffect(() => {
         const fetchTotalCompletedLists = async () => {
-            const data = await allLists();
-            // console.log(data);
-            const completedLists = data.filter((list: any) => list.is_completed);
-            const completedListsLength = completedLists.length/ data.length * 100;
-            setTotalCompletedLists(completedListsLength);
+            await handleFetchTotalCompletedLists();
         }
 
         fetchTotalCompletedLists();
     })
+
+    const handleFetchTotalCompletedLists = async () => {
+        const data = await allLists();
+        const completedLists = data.filter((list: any) => list.is_completed);
+        const completedListsLength = completedLists.length / data.length * 100;
+        setTotalCompletedLists(completedListsLength);
+    }
+
     return (
         <div className="flex flex-col max-w-2xl w-full bg-neutral-100 min-h-[600px] rounded-2xl shadow-2xl m-5">
             <div className="relative h-35 overlay">
@@ -39,7 +43,7 @@ export default function Checklist() {
                 </div>
             </div>
             <div className="flex flex-col mt-10 items-center w-full relative">
-                <ExpandableList />
+                <ExpandableList updatedProgress={handleFetchTotalCompletedLists} />
             </div>
         </div>
 

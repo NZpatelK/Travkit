@@ -41,7 +41,7 @@ export default function ProgressBar({ progressNum = 0 }: ProgressBarProps) {
                     style={{ width: `${progress}%` }}
                 ></div>
             </div>
-            <span className="text-sm font-semibold text-neutral-800">{progress}%</span>
+            <span className="text-sm font-semibold text-neutral-800">{progress.toFixed(0)}%</span>
         </div>
     );
 }
