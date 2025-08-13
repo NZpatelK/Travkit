@@ -38,6 +38,15 @@ export async function addListItem(title: string, categoryId: string) {
   return data;
 }
 
+export async function allLists() {
+  const { data, error } = await supabase
+    .from('list')
+    .select();
+
+  if (error) toast.error(error.message);
+  return data;
+}
+
 
 export async function updateIsCompleted(id: string | number, is_completed: boolean) {
   const { data, error } = await supabase
