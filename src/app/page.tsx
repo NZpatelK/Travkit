@@ -48,7 +48,12 @@ export default function Home() {
         isDataEmpty &&
         <div>
           <AddOnList isOpen={isDataEmpty} onClose={() => setIsDataEmpty(false)}>
-            <div>HELLO</div>
+            <h1 className="text-3xl font-semibold text-neutral-700 text-center">Welcome to TravKit</h1>
+            <div className="text-neutral-900">
+              <p>Travel To: </p>
+              <p>How Many Days?:</p>
+            </div>
+
           </AddOnList>
         </div>
       }
