@@ -1,10 +1,26 @@
 'use client'
 import Checklist from "./components/Checklist";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { clearAllData, seedDataIfEmpty } from "./utils/seedData";
 import { Toaster } from "react-hot-toast";
+import { allLists } from "./utils/supabase/client";
+import AddOnList from "./components/AddOnList";
 
 export default function Home() {
+  const [isDataEmpty, setIsDataEmpty] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await allLists();
+      if (data && data.length === 0) {
+        setIsDataEmpty(true);
+      }
+      else {
+        // setIsDataEmpty(false);
+      }
+    }
+    fetchData();
+  }, []);
 
 
   const handleClearList = () => {
@@ -21,13 +37,21 @@ export default function Home() {
         <h1>TravKit</h1>
       </div>
 
-      <div className="flex-grow flex flex-col items-center justify-center">
+      {!isDataEmpty && <div className="flex-grow flex flex-col items-center justify-center">
         <Checklist />
         <div className="mt-2 flex gap-4">
           <button className="bg-red-600 text-white font-semibold px-4 py-2 rounded" onClick={handleClearList}>Delete All Tasks</button>
           <button className="bg-gray-600 text-white font-semibold px-4 py-2 rounded">Clear Completed</button>
         </div>
-      </div>
+      </div>}
+      {
+        isDataEmpty &&
+        <div>
+          <AddOnList isOpen={isDataEmpty} onClose={() => setIsDataEmpty(false)}>
+            <div>HELLO</div>
+          </AddOnList>
+        </div>
+      }
     </div>
 
 
