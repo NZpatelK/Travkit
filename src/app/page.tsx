@@ -6,9 +6,6 @@ import { Toaster } from "react-hot-toast";
 
 export default function Home() {
 
-  useEffect(() => {
-    seedDataIfEmpty();
-  })
 
   const handleClearList = () => {
     clearAllData();
@@ -24,9 +21,12 @@ export default function Home() {
         <h1>TravKit</h1>
       </div>
 
-      <div className="flex-grow flex items-center justify-center">
+      <div className="flex-grow flex flex-col items-center justify-center">
         <Checklist />
-        <button onClick={handleClearList}>Clear</button>
+        <div className="mt-2 flex gap-4">
+          <button className="bg-red-600 text-white font-semibold px-4 py-2 rounded" onClick={handleClearList}>Delete All Tasks</button>
+          <button className="bg-gray-600 text-white font-semibold px-4 py-2 rounded" onClick={seedDataIfEmpty}>Clear Completed</button>
+        </div>
       </div>
     </div>
 

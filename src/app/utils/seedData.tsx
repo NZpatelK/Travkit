@@ -1,7 +1,6 @@
 import { supabase } from '@/app/utils/supabase/client';
-import seedData from '@/app/data/travel.json'; // replace with your actual path
 
-export async function seedDataIfEmpty() {
+export async function seedDataIfEmpty(seedData: { categories: { categoryName: string, list: { name: string }[] }[] }) {
   try {
     // Check if tables are empty
     const { count: catCount, error: catCountError } = await supabase
@@ -19,7 +18,7 @@ export async function seedDataIfEmpty() {
       // Prepare categories insert payload with order_by
       const categoryInsertPayload = seedData.categories.map((c, catIndex) => ({
         title: c.categoryName,
-        order_by: catIndex + 1 // Add order number
+        order_by: catIndex + 1
       }));
 
       console.log('Seeding categories:', categoryInsertPayload);
@@ -40,13 +39,13 @@ export async function seedDataIfEmpty() {
         return acc;
       }, {} as Record<string, string>);
 
-      // Prepare list insert payload by flattening all nested lists with order_by
-      const listInsertPayload = seedData.categories.flatMap((category, catIndex) =>
+      // Prepare list insert payload
+      const listInsertPayload = seedData.categories.flatMap((category) =>
         category.list.map((item, itemIndex) => ({
           title: item.name,
           is_completed: false,
           category_id: categoryMap[category.categoryName],
-          order_by: itemIndex + 1 // Add order number for list items
+          order_by: itemIndex + 1
         }))
       );
 
