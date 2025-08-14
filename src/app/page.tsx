@@ -25,7 +25,7 @@ export default function Home() {
         <Checklist />
         <div className="mt-2 flex gap-4">
           <button className="bg-red-600 text-white font-semibold px-4 py-2 rounded" onClick={handleClearList}>Delete All Tasks</button>
-          <button className="bg-gray-600 text-white font-semibold px-4 py-2 rounded" onClick={seedDataIfEmpty}>Clear Completed</button>
+          <button className="bg-gray-600 text-white font-semibold px-4 py-2 rounded">Clear Completed</button>
         </div>
       </div>
     </div>
