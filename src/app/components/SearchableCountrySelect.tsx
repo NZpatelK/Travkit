@@ -27,7 +27,6 @@ export default function SearchableCountrySelect() {
 
   return (
     <div className="w-72">
-      <label className="block mb-2 font-medium text-gray-700">Select Country</label>
       <Select
         options={options}
         value={selectedCountry}
