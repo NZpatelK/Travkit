@@ -35,11 +35,6 @@ export default function SearchableCountrySelect() {
         placeholder="Search and select a country..."
         isClearable
       />
-      {selectedCountry && (
-        <p className="mt-2 text-sm text-gray-600">
-          Selected: {selectedCountry.label}
-        </p>
-      )}
     </div>
   );
 }
