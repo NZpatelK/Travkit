@@ -5,6 +5,7 @@ import { clearAllData, seedDataIfEmpty } from "./utils/seedData";
 import { Toaster } from "react-hot-toast";
 import { allLists } from "./utils/supabase/client";
 import AddOnList from "./components/AddOnList";
+import SearchableCountrySelect from "./components/SearchableCountrySelect";
 
 export default function Home() {
   const [isDataEmpty, setIsDataEmpty] = useState(true);
@@ -51,6 +52,7 @@ export default function Home() {
             <h1 className="text-3xl font-semibold text-neutral-700 text-center">Welcome to TravKit</h1>
             <div className="text-neutral-900">
               <p>Travel To: </p>
+              <SearchableCountrySelect />
               <p>How Many Days?:</p>
             </div>
 
