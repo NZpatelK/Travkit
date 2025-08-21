@@ -11,7 +11,7 @@ interface ExpandedState {
 }
 
 interface ExpandableListProps {
-    updatedProgress: () => void;
+    updatedProgress?: () => void;
 }
 
 export default function ExpandableList({ updatedProgress }: ExpandableListProps) {
@@ -29,7 +29,10 @@ export default function ExpandableList({ updatedProgress }: ExpandableListProps)
     const fetchCategoriesWithListsData = async () => {
         const data = await getCategoriesWithLists();
         setCategoriesWithLists(data);
-        updatedProgress();
+        
+        if (updatedProgress) {
+            updatedProgress();
+        }
     };
 
     const toggleItem = (index: number) => {
