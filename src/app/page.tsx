@@ -68,7 +68,8 @@ export default function Home() {
              <hr className="my-5 w-11/12 mx-auto text-neutral-300"/>
              <div>
               <h2 className="text-center font-bold capitalize">Select a Checklist template to get started</h2>
-              <ExpandableList/>
+              <ExpandableList isTemplate={true}/>
+              {/* <ExpandableList/> */}
              </div>
 
             </div>
