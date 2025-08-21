@@ -34,56 +34,52 @@ export default function ExpandableList({ updatedProgress }: ExpandableListProps)
 
     const toggleItem = (index: number) => {
         setExpandedItems((prev) => {
-            const isExpanding = !prev[index];
-            const contentDiv = listRefs.current[index];
+            const newState: ExpandedState = {};
 
-            if (contentDiv) {
-                if (isExpanding) {
-                    // Slide down animation
-                    gsap.set(contentDiv, { display: 'block', height: 0, opacity: 0 });
-                    gsap.to(contentDiv, {
-                        height: 'auto',
-                        opacity: 1,
-                        duration: 0.3,
-                        ease: 'power2.out',
-                        onComplete: () => {
-                            gsap.set(contentDiv, { height: 'auto' });
-                        },
-                    });
+            // Collapse all other items and expand only the clicked one
+            categoriesWithLists.forEach((_, i) => {
+                newState[i] = i === index ? !prev[i] : false;
 
-                    // Animate inner list items
-                    const listItems = contentDiv.querySelectorAll('.list-item-container');
-                    gsap.fromTo(
-                        listItems,
-                        { y: -50, opacity: 0 },
-                        {
-                            y: 0,
+                const contentDiv = listRefs.current[i];
+                if (contentDiv) {
+                    if (newState[i]) {
+                        // Slide down
+                        gsap.set(contentDiv, { display: 'block', height: 0, opacity: 0 });
+                        gsap.to(contentDiv, {
+                            height: 'auto',
                             opacity: 1,
-                            duration: 0.5,
-                            stagger: 0.1,
+                            duration: 0.3,
                             ease: 'power2.out',
-                        }
-                    );
-                } else {
-                    // Slide up animation
-                    gsap.to(contentDiv, {
-                        height: 0,
-                        opacity: 0,
-                        duration: 0.3,
-                        ease: 'power2.in',
-                        onComplete: () => {
-                            gsap.set(contentDiv, { display: 'none' });
-                        },
-                    });
-                }
-            }
+                            onComplete: () => {
+                                gsap.set(contentDiv, { height: 'auto' });
+                            },
+                        });
 
-            return {
-                ...prev,
-                [index]: isExpanding,
-            };
+                        const listItems = contentDiv.querySelectorAll('.list-item-container');
+                        gsap.fromTo(
+                            listItems,
+                            { y: -50, opacity: 0 },
+                            { y: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: 'power2.out' }
+                        );
+                    } else {
+                        // Slide up
+                        gsap.to(contentDiv, {
+                            height: 0,
+                            opacity: 0,
+                            duration: 0.3,
+                            ease: 'power2.in',
+                            onComplete: () => {
+                                gsap.set(contentDiv, { display: 'none' });
+                            },
+                        });
+                    }
+                }
+            });
+
+            return newState;
         });
     };
+
 
     // Sync refs with categories
     useEffect(() => {
