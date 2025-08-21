@@ -26,7 +26,7 @@ export default function SearchableCountrySelect() {
   console.log(countries);
 
   return (
-    <div className="w-72">
+    <div className="w-full">
       <Select
         options={options}
         value={selectedCountry}

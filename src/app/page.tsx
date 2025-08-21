@@ -6,6 +6,8 @@ import { Toaster } from "react-hot-toast";
 import { allLists } from "./utils/supabase/client";
 import AddOnList from "./components/AddOnList";
 import SearchableCountrySelect from "./components/SearchableCountrySelect";
+import { Expand } from "lucide-react";
+import ExpandableList from "./components/ExpandableList";
 
 export default function Home() {
   const [isDataEmpty, setIsDataEmpty] = useState(true);
@@ -49,13 +51,26 @@ export default function Home() {
         isDataEmpty &&
         <div>
           <AddOnList isOpen={isDataEmpty} onClose={() => setIsDataEmpty(false)}>
-            <h1 className="text-3xl font-semibold text-neutral-700 text-center">Welcome to TravKit</h1>
+            <h1 className="text-3xl font-bold text-neutral-800 text-center">Welcome to TravKit</h1>
+
             <div className="text-neutral-900 mt-5">
-              <div className="flex items-center">
-                <p className="mr-2">Travel To: </p>
+
+              <div className="">
+                <p className="mr-2 font-semibold">Travel To: </p>
                 <SearchableCountrySelect />
               </div>
-              <p>How Many Days?:</p>
+
+             <div className="mt-5 font-semibold">
+                <p>How Many Days?:</p>
+                <input type="number"  className="w-full p-1.5 px-3 border border-gray-300 rounded"/>
+             </div>
+
+             <hr className="my-5 w-11/12 mx-auto text-neutral-300"/>
+             <div>
+              <h2 className="text-center font-bold capitalize">Select a Checklist template to get started</h2>
+              {/* <ExpandableList/> */}
+             </div>
+
             </div>
 
           </AddOnList>
