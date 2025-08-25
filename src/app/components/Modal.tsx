@@ -15,7 +15,7 @@ const backdropVariants = {
 
 const modalVariants = {
   hidden: { scale: 0, opacity: 0 },
-  visible: { scale: 1, opacity: 1, transition: { type: "spring", stiffness: 300 } },
+  visible: { scale: 1, opacity: 1, transition: { type: "spring" as const, stiffness: 150 } },
 };
 
 export default function Modal({ isOpen, onClose, children }: ModalProps) {
@@ -41,7 +41,7 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
             {children}
             <button
               onClick={onClose}
-              className="absolute top-2 right-4 text-gray-500 hover:text-gray-800"
+              className="absolute top-2 right-4 text-violet-700 hover:text-violet-900"
             >
               ✕
             </button>
