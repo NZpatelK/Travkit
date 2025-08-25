@@ -4,6 +4,9 @@ import { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import List from './List';
 import { getCategoriesWithLists } from '../utils/supabase/client';
+import { Category, travelData } from '../data/travelData';
+
+
 
 interface ExpandedState {
     [key: number]: boolean;
@@ -16,13 +19,16 @@ interface ExpandableListProps {
 
 export default function ExpandableList({ updatedProgress, isTemplate = false }: ExpandableListProps) {
     const [expandedItems, setExpandedItems] = useState<ExpandedState>({});
-    const [categoriesWithLists, setCategoriesWithLists] = useState<any[]>([]);
+    const [categoriesWithLists, setCategoriesWithLists] = useState<Category[]>([]);
     const listRefs = useRef<(HTMLDivElement | null)[]>([]);
 
     useEffect(() => {
         const fetchCategoriesWithLists = async () => {
-            if (isTemplate) {
+            if (!isTemplate) {
                 await fetchCategoriesWithListsData();
+            }
+            else {
+                setCategoriesWithLists(travelData.categories as Category[]);
             }
         };
         fetchCategoriesWithLists();
@@ -30,7 +36,7 @@ export default function ExpandableList({ updatedProgress, isTemplate = false }: 
 
     const fetchCategoriesWithListsData = async () => {
         const data = await getCategoriesWithLists();
-        setCategoriesWithLists(data);
+        setCategoriesWithLists(data as Category[]);
 
         if (updatedProgress) {
             updatedProgress();
