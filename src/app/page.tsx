@@ -61,20 +61,22 @@ export default function Home() {
                 <SearchableCountrySelect />
               </div>
 
-             <div className="mt-5 font-semibold">
+              <div className="mt-5 font-semibold">
                 <p>How Many Days?:</p>
-                <input type="number"  className="w-full p-1.5 px-3 border border-gray-300 rounded"/>
-             </div>
+                <input type="number" className="w-full p-1.5 px-3 border border-gray-300 rounded" />
+              </div>
 
-             <hr className="my-5 w-11/12 mx-auto text-neutral-300"/>
-             <div>
-              <h2 className="text-center font-bold text-lg capitalize">Select a Checklist template to get started</h2>
-             </div>
+              <hr className="my-5 w-11/12 mx-auto text-neutral-300" />
+              <div>
+                <h2 className="text-center font-bold text-lg capitalize">Select a Checklist template to get started</h2>
+              </div>
 
-             {travelData.categories.map((data, index) => (
-                <TemplateCard key={index} {...(data as Category)}  />
-              ))}
+              <div className="flex flex-wrap justify-center gap-4 mt-5">
+                {travelData.categories.map((data, index) => (
+                  <TemplateCard key={index} {...(data as Category)} />
+                ))}
 
+              </div>
             </div>
           </AddOnList>
         </div>
