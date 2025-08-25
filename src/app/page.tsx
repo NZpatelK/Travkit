@@ -6,8 +6,9 @@ import { Toaster } from "react-hot-toast";
 import { allLists } from "./utils/supabase/client";
 import AddOnList from "./components/AddOnList";
 import SearchableCountrySelect from "./components/SearchableCountrySelect";
-import { Expand } from "lucide-react";
-import ExpandableList from "./components/ExpandableList";
+import { Category, travelData } from "./data/travelData";
+import TemplateCard from "./components/TemplateCard";
+import { h1 } from "framer-motion/client";
 
 export default function Home() {
   const [isDataEmpty, setIsDataEmpty] = useState(true);
@@ -68,12 +69,13 @@ export default function Home() {
              <hr className="my-5 w-11/12 mx-auto text-neutral-300"/>
              <div>
               <h2 className="text-center font-bold capitalize">Select a Checklist template to get started</h2>
-              <ExpandableList/>
-              {/* <ExpandableList/> */}
              </div>
 
-            </div>
+             {travelData.categories.map((data, index) => (
+                <TemplateCard key={index} {...(data as Category)}  />
+              ))}
 
+            </div>
           </AddOnList>
         </div>
       }
