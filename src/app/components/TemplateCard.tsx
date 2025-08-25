@@ -6,11 +6,12 @@ import Modal from "./Modal";
 
 export default function TemplateCard(category: Category) {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
 
     return (
-        <div className="w-full h-full flex items-center justify-between border-violet-400 bg-violet-100 border-2  shadow-md rounded-md p-2 pr-6 relative">
+        <div className={`w-full h-full flex items-center justify-between ${isChecked ? ' border-green-400 bg-green-100' : ' border-violet-400 bg-violet-100'} border-2  shadow-md rounded-md p-2 pr-6 relative transition-all duration-500 ease-in-out`}>
             <div className="flex items-center">
-                <Checkbox isChecked={false} />
+                <Checkbox isChecked={isChecked} handleCheck={() => setIsChecked(!isChecked)} />
                 <h2 className="text-md ml-2 font-bold text-neutral-900 capitalize">{category.title}</h2>
             </div>
             <button className="text-blue-500 text-xs font-semibold tracking-wide" onClick={() => setIsModalOpen(true)}>View List</button>

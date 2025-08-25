@@ -15,7 +15,7 @@ const backdropVariants = {
 
 const modalVariants = {
   hidden: { scale: 0, opacity: 0 },
-  visible: { scale: 1, opacity: 1, transition: { type: "spring" as const, stiffness: 150 } },
+  visible: { scale: 1, opacity: 1, transition: { type: "spring" as const, stiffness: 100 } },
 };
 
 export default function Modal({ isOpen, onClose, children }: ModalProps) {

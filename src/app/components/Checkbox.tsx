@@ -3,19 +3,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 interface CheckboxProps {
     isChecked: boolean;
-    handleCheck?: (e: React.ChangeEvent<HTMLInputElement>) => void
+    handleCheck?: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 export default function Checkbox({ isChecked, handleCheck }: CheckboxProps) {
 
     return (
-        <div className="relative cursor-pointer">
+        <div className="relative cursor-pointer" onClick={handleCheck}>
             <input
                 type="checkbox"
                 className="sr-only"
                 checked={isChecked}
-                onChange={handleCheck}
-                readOnly 
+                readOnly
             />
             <motion.div
                 className="w-4 h-4 border-2 rounded-md flex items-center justify-center"
