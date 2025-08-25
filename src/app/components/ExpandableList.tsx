@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import List from './List';
 import { getCategoriesWithLists } from '../utils/supabase/client';
-import { li } from 'framer-motion/m';
 
 interface ExpandedState {
     [key: number]: boolean;
