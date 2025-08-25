@@ -9,7 +9,7 @@ interface CheckboxProps {
 export default function Checkbox({ isChecked, handleCheck }: CheckboxProps) {
 
     return (
-        <div className="relative cursor-pointer z-10">
+        <div className="relative cursor-pointer">
             <input
                 type="checkbox"
                 className="sr-only"
