@@ -53,18 +53,27 @@ export default function Home() {
         <div>
           <AddOnList isOpen={isDataEmpty} onClose={() => setIsDataEmpty(false)}>
             <h1 className="text-3xl font-bold text-neutral-800 text-center">Welcome to TravKit</h1>
+            <hr className="my-2 w-5/12 mx-auto text-neutral-300" />
+            <h2 className="text-sm font-semibold text-neutral-800 text-center">Create a checklist for your next trip</h2>
 
             <div className="text-neutral-900 mt-5">
 
-              <div className="">
-                <p className="mr-2 font-semibold">Travel To: </p>
-                <SearchableCountrySelect />
+              <div className="max-w-md mx-auto p-5 space-y-6">
+                <div className="flex flex-col">
+                  <label className="mb-2 text-gray-700 font-semibold">Travel To:</label>
+                  <SearchableCountrySelect />
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="mb-2 text-gray-700 font-semibold">How Many Days?</label>
+                  <input
+                    type="number"
+                    placeholder="Enter number of days"
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  />
+                </div>
               </div>
 
-              <div className="mt-5 font-semibold">
-                <p>How Many Days?:</p>
-                <input type="number" className="w-full p-1.5 px-3 border border-gray-300 rounded" />
-              </div>
 
               <hr className="my-5 w-11/12 mx-auto text-neutral-300" />
               <div>
@@ -77,6 +86,9 @@ export default function Home() {
                 ))}
 
               </div>
+            </div>
+            <div className="text-center">
+              <button className="bg-violet-600 text-white font-semibold w-10/12 py-3 rounded mt-5">Create Checklist</button>
             </div>
           </AddOnList>
         </div>

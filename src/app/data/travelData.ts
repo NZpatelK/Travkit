@@ -49,7 +49,7 @@ export const travelData: TravelDataProps = {
       ],
     },
     {
-      title: "clothe",
+      title: "clothes",
       orderBy: 4,
       list: [
         { title: "jacket", orderBy: 1 },

@@ -37,24 +37,23 @@ export default function AddOnList({ isOpen, onClose, children }: SlideUpModalPro
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            // onClick={handleClose}
           />
 
           {/* Slide Up to Center Modal */}
           <motion.div
-            className="fixed top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-lg max-w-lg w-full"
+            className="fixed top-1/2 left-1/2 z-50 -translate-x-1/2 rounded-2xl bg-white p-6 shadow-lg max-w-lg w-full"
             initial={{ y: "200%", opacity: 0 }}
             animate={{ y: "-50%", opacity: 1 }}
             exit={{ y: "200%", opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
-            <button
+            {/* <button
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
               onClick={handleClose}
               aria-label="Close"
             >
               <X className="w-5 h-5" />
-            </button>
+            </button> */}
             {children}
           </motion.div>
         </>
