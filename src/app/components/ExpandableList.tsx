@@ -4,9 +4,6 @@ import { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import List from './List';
 import { getCategoriesWithLists } from '../utils/supabase/client';
-import { Category, travelData } from '../data/travelData';
-
-
 
 interface ExpandedState {
     [key: number]: boolean;
@@ -14,29 +11,23 @@ interface ExpandedState {
 
 interface ExpandableListProps {
     updatedProgress?: () => void;
-    isTemplate?: boolean;
 }
 
-export default function ExpandableList({ updatedProgress, isTemplate = false }: ExpandableListProps) {
+export default function ExpandableList({ updatedProgress }: ExpandableListProps) {
     const [expandedItems, setExpandedItems] = useState<ExpandedState>({});
-    const [categoriesWithLists, setCategoriesWithLists] = useState<Category[]>([]);
+    const [categoriesWithLists, setCategoriesWithLists] = useState<any[]>([]);
     const listRefs = useRef<(HTMLDivElement | null)[]>([]);
 
     useEffect(() => {
         const fetchCategoriesWithLists = async () => {
-            if (!isTemplate) {
-                await fetchCategoriesWithListsData();
-            }
-            else {
-                setCategoriesWithLists(travelData.categories as Category[]);
-            }
+            await fetchCategoriesWithListsData();
         };
         fetchCategoriesWithLists();
     }, []);
 
     const fetchCategoriesWithListsData = async () => {
         const data = await getCategoriesWithLists();
-        setCategoriesWithLists(data as Category[]);
+        setCategoriesWithLists(data);
 
         if (updatedProgress) {
             updatedProgress();
@@ -122,11 +113,11 @@ export default function ExpandableList({ updatedProgress, isTemplate = false }: 
                     >
                         <span className="font-semibold text-neutral-700 capitalize">{category.title}</span>
                         <div className="flex items-center">
-                            {!isTemplate && <div className="bg-white rounded-full p-1 px-4 mr-4 flex items-center justify-center">
+                            <div className="bg-white rounded-full p-1 px-4 mr-4 flex items-center justify-center">
                                 <span className="text-rose-600 text-xs font-semibold">
                                     {calculateTotalCompleted(category)}   / {category.list.length}
                                 </span>
-                            </div>}
+                            </div>
                             <span className="text-rose-600">{expandedItems[index] ? '−' : '+'}</span>
                         </div>
                     </button>
@@ -138,7 +129,7 @@ export default function ExpandableList({ updatedProgress, isTemplate = false }: 
                     >
                         <div className="p-4 bg-white">
                             {category.list.map((listItem: any, i: number) => (
-                                <List key={listItem.id ?? i} {...listItem} updateData={fetchCategoriesWithListsData} isTemplate={isTemplate} />
+                                <List key={listItem.id ?? i} {...listItem} updateData={fetchCategoriesWithListsData}/>
                             ))}
                         </div>
                     </div>
