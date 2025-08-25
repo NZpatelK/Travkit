@@ -23,8 +23,6 @@ export default function SearchableCountrySelect() {
     setSelectedCountry(option);
   };
 
-  console.log(countries);
-
   return (
     <div className="w-full">
       <Select

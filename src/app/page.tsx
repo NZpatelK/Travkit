@@ -2,16 +2,17 @@
 import Checklist from "./components/Checklist";
 import { useEffect, useState } from "react";
 import { clearAllData, seedDataIfEmpty } from "./utils/seedData";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { allLists } from "./utils/supabase/client";
 import AddOnList from "./components/AddOnList";
 import SearchableCountrySelect from "./components/SearchableCountrySelect";
 import { Category, travelData } from "./data/travelData";
 import TemplateCard from "./components/TemplateCard";
-import { h1 } from "framer-motion/client";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const [isDataEmpty, setIsDataEmpty] = useState(true);
+  const [AddOnListData, setAddOnListData] = useState<Category[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,7 +21,7 @@ export default function Home() {
         setIsDataEmpty(true);
       }
       else {
-        // setIsDataEmpty(false);
+        setIsDataEmpty(false);
       }
     }
     fetchData();
@@ -29,7 +30,32 @@ export default function Home() {
 
   const handleClearList = () => {
     clearAllData();
+    toast.success("List cleared!");
+    setAddOnListData([]);
+    setIsDataEmpty(true);
   };
+
+  const handleAddList = (category: Category) => {
+    setAddOnListData([...AddOnListData, category]);
+    console.log(AddOnListData);
+  }
+
+  const handleRemoveList = (title: string) => {
+    setAddOnListData(AddOnListData.filter((item) => item.title !== title));
+    console.log(AddOnListData);
+  }
+
+  const handleCreateList = async () => {
+    if(AddOnListData.length === 0) {
+      toast.error("Please add at least one list");
+      return;
+    }
+    
+    await seedDataIfEmpty(AddOnListData);
+    toast.success("List created!");
+    setAddOnListData([]);
+    setIsDataEmpty(false);
+  }
 
   return (
     <div className="h-screen flex flex-col">
@@ -82,13 +108,21 @@ export default function Home() {
 
               <div className="flex flex-wrap justify-center gap-4 mt-5">
                 {travelData.categories.map((data, index) => (
-                  <TemplateCard key={index} {...(data as Category)} />
+                  <TemplateCard key={index} category={data} handleAddList={handleAddList} handleRemoveList={handleRemoveList} />
                 ))}
 
               </div>
             </div>
             <div className="text-center">
-              <button className="bg-violet-600 text-white font-semibold w-10/12 py-3 rounded mt-5">Create Checklist</button>
+              <motion.button
+                className="bg-violet-600 text-white font-semibold w-10/12 py-3 rounded mt-5"
+                onClick={handleCreateList}
+                whileHover={{ scale: 1.05, backgroundColor: "#7c3aed" }} // slightly bigger & brighter on hover
+                whileTap={{ scale: 0.95 }} // shrink when clicked
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                Create Checklist
+              </motion.button>
             </div>
           </AddOnList>
         </div>

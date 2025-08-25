@@ -1,6 +1,7 @@
 import { supabase } from '@/app/utils/supabase/client';
+import { Category } from '../data/travelData';
 
-export async function seedDataIfEmpty(seedData: { categories: { categoryName: string, list: { name: string }[] }[] }) {
+export async function seedDataIfEmpty(categories: Category[]) {
   try {
     // Check if tables are empty
     const { count: catCount, error: catCountError } = await supabase
@@ -15,46 +16,44 @@ export async function seedDataIfEmpty(seedData: { categories: { categoryName: st
     if (listCountError) throw new Error(`Error counting list items: ${JSON.stringify(listCountError)}`);
 
     if ((catCount ?? 0) === 0 && (listCount ?? 0) === 0) {
-      // Prepare categories insert payload with order_by
-      const categoryInsertPayload = seedData.categories.map((c, catIndex) => ({
-        title: c.categoryName,
-        order_by: catIndex + 1
+      // Prepare categories insert payload
+      const categoryInsertPayload = categories.map((c) => ({
+        title: c.title,
+        order_by: c.orderBy,
       }));
 
       console.log('Seeding categories:', categoryInsertPayload);
 
       // Insert categories
-      const { data: categories, error: catError } = await supabase
+      const { data: insertedCategories, error: catError } = await supabase
         .from('categories')
         .insert(categoryInsertPayload)
         .select();
 
-      console.log('Categories inserted:', categories, 'Error:', catError);
+      console.log('Categories inserted:', insertedCategories, 'Error:', catError);
 
       if (catError) throw new Error(`Category insert error: ${JSON.stringify(catError)}`);
 
-      // Map categoryName -> id
-      const categoryMap = categories.reduce((acc, cat) => {
+      // Map category title -> id
+      const categoryMap = insertedCategories.reduce((acc, cat) => {
         acc[cat.title] = cat.id;
         return acc;
-      }, {} as Record<string, string>);
+      }, {} as Record<string, number>);
 
       // Prepare list insert payload
-      const listInsertPayload = seedData.categories.flatMap((category) =>
-        category.list.map((item, itemIndex) => ({
-          title: item.name,
-          is_completed: false,
-          category_id: categoryMap[category.categoryName],
-          order_by: itemIndex + 1
+      const listInsertPayload = categories.flatMap((category) =>
+        category.list.map((item) => ({
+          title: item.title,
+          is_completed: item.is_completed ?? false,
+          category_id: categoryMap[category.title],
+          order_by: item.orderBy,
         }))
       );
 
       console.log('Seeding list items:', listInsertPayload);
 
       // Insert list items
-      const { error: listError } = await supabase
-        .from('list')
-        .insert(listInsertPayload);
+      const { error: listError } = await supabase.from('list').insert(listInsertPayload);
 
       console.log('List insert error:', listError);
 

@@ -41,7 +41,7 @@ export default function AddOnList({ isOpen, onClose, children }: SlideUpModalPro
 
           {/* Slide Up to Center Modal */}
           <motion.div
-            className="fixed top-1/2 left-1/2 z-50 -translate-x-1/2 rounded-2xl bg-white p-6 shadow-lg max-w-lg w-full"
+            className="fixed top-1/2 left-1/2 z-50 -translate-x-1/2 rounded-2xl bg-white p-6 max-w-lg w-11/12"
             initial={{ y: "200%", opacity: 0 }}
             animate={{ y: "-50%", opacity: 1 }}
             exit={{ y: "200%", opacity: 0 }}
