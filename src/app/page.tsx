@@ -11,6 +11,7 @@ import TemplateCard from "./components/TemplateCard";
 import { motion } from "framer-motion";
 import { useRefresh } from "./context/RefreshContext";
 
+
 interface CountryOption {
   value: string;
   label: string;
@@ -22,6 +23,7 @@ export default function Home() {
   const [AddOnListData, setAddOnListData] = useState<Category[]>([]);
   const [inputDuration, setInputDuration] = useState<number | "">("");
   const [selectedCountry, setSelectedCountry] = useState<CountryOption | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { triggerRefresh } = useRefresh();
 
