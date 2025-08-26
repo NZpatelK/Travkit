@@ -35,6 +35,11 @@ export default function Home() {
     setIsDataEmpty(true);
   };
 
+  const handleClearCompleted = () => {
+    // Logic to clear completed tasks
+    toast.success("Completed tasks cleared!");
+  };
+
   const handleAddList = (category: Category) => {
     setAddOnListData([...AddOnListData, category]);
     console.log(AddOnListData);
