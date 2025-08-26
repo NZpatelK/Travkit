@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import List from './List';
 import { getCategoriesWithLists } from '../utils/supabase/client';
+import { useRefresh } from '../context/RefreshContext';
 
 interface ExpandedState {
     [key: number]: boolean;
@@ -17,13 +18,15 @@ export default function ExpandableList({ updatedProgress }: ExpandableListProps)
     const [expandedItems, setExpandedItems] = useState<ExpandedState>({});
     const [categoriesWithLists, setCategoriesWithLists] = useState<any[]>([]);
     const listRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const { refreshFlag } = useRefresh();
+
 
     useEffect(() => {
         const fetchCategoriesWithLists = async () => {
             await fetchCategoriesWithListsData();
         };
         fetchCategoriesWithLists();
-    }, []);
+    }, [refreshFlag]);
 
     const fetchCategoriesWithListsData = async () => {
         const data = await getCategoriesWithLists();
@@ -108,7 +111,7 @@ export default function ExpandableList({ updatedProgress }: ExpandableListProps)
                     className={`border-2 ${calculateTotalCompleted(category) === category.list.length ? 'border-green-400 ' : 'border-violet-400 '} rounded-lg mb-2 overflow-hidden shadow-md transition-all`}
                 >
                     <button
-                        className={`w-full text-left p-4 ${calculateTotalCompleted(category) === category.list.length ? 'bg-green-100 hover:bg-green-200'  : 'bg-violet-100 hover:bg-violet-200'} transition-colors flex justify-between items-center`}
+                        className={`w-full text-left p-4 ${calculateTotalCompleted(category) === category.list.length ? 'bg-green-100 hover:bg-green-200' : 'bg-violet-100 hover:bg-violet-200'} transition-colors flex justify-between items-center`}
                         onClick={() => toggleItem(index)}
                     >
                         <span className="font-semibold text-neutral-700 capitalize">{category.title}</span>
@@ -129,7 +132,7 @@ export default function ExpandableList({ updatedProgress }: ExpandableListProps)
                     >
                         <div className="p-4 bg-white">
                             {category.list.map((listItem: any, i: number) => (
-                                <List key={listItem.id ?? i} {...listItem} updateData={fetchCategoriesWithListsData}/>
+                                <List key={listItem.id ?? i} {...listItem} updateData={fetchCategoriesWithListsData} />
                             ))}
                         </div>
                     </div>

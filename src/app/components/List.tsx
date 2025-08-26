@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Checkbox from "./Checkbox";
 import { updateIsCompleted } from "../utils/supabase/client";
 
@@ -12,6 +12,10 @@ interface ListProps {
 
 export default function List({ id, title, is_completed, updateData}: ListProps) {
     const [isChecked, setIsChecked] = useState(is_completed);
+
+    useEffect(() => {
+        setIsChecked(is_completed);
+    }, [is_completed]);
 
     const handleToggle = async () => {
         await updateIsCompleted(id, !isChecked);

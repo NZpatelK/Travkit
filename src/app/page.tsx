@@ -9,10 +9,13 @@ import SearchableCountrySelect from "./components/SearchableCountrySelect";
 import { Category, travelData } from "./data/travelData";
 import TemplateCard from "./components/TemplateCard";
 import { motion } from "framer-motion";
+import { useRefresh } from "./context/RefreshContext";
 
 export default function Home() {
   const [isDataEmpty, setIsDataEmpty] = useState(true);
   const [AddOnListData, setAddOnListData] = useState<Category[]>([]);
+  const { triggerRefresh } = useRefresh();
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,6 +41,7 @@ export default function Home() {
   const handleClearCompleted = async () => {
     // Logic to clear completed tasks
     await resetIsCompleted();
+    triggerRefresh();
     toast.success("Completed tasks cleared!");
   };
 
@@ -52,11 +56,11 @@ export default function Home() {
   }
 
   const handleCreateList = async () => {
-    if(AddOnListData.length === 0) {
+    if (AddOnListData.length === 0) {
       toast.error("Please add at least one list");
       return;
     }
-    
+
     await seedDataIfEmpty(AddOnListData);
     toast.success("List created!");
     setAddOnListData([]);
@@ -134,8 +138,6 @@ export default function Home() {
         </div>
       }
     </div>
-
-
   );
 }
 
