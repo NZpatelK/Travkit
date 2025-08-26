@@ -10,6 +10,7 @@ import { Category, travelData } from "./data/travelData";
 import TemplateCard from "./components/TemplateCard";
 import { motion } from "framer-motion";
 import { useRefresh } from "./context/RefreshContext";
+import GlobePage from "./components/Globe";
 
 
 interface CountryOption {
@@ -30,6 +31,7 @@ export default function Home() {
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       const data = await allLists();
       if (data && data.length === 0) {
         setIsDataEmpty(true);
@@ -37,6 +39,7 @@ export default function Home() {
       else {
         setIsDataEmpty(false);
       }
+      setIsLoading(false);
     }
     fetchData();
   }, []);
@@ -71,6 +74,16 @@ export default function Home() {
       toast.error("Please add at least one list");
       return;
     }
+    if (!selectedCountry) {
+      toast.error("Please select a country");
+      return;
+    }
+    if(!inputDuration || inputDuration <= 1) {
+      toast.error("Please enter a valid duration. Must be greater than 1.");
+      return;
+    }
+
+    setIsLoading(true);
 
     await seedDataIfEmpty(AddOnListData, selectedCountry?.label ?? "", inputDuration as number);
     toast.success("List created!");
@@ -78,6 +91,8 @@ export default function Home() {
     setInputDuration("");
     setSelectedCountry(null);
     setIsDataEmpty(false);
+    
+    setIsLoading(false);
   }
 
   return (
@@ -90,7 +105,7 @@ export default function Home() {
         <h1>TravKit</h1>
       </div>
 
-      {!isDataEmpty && <div className="flex-grow flex flex-col items-center justify-center">
+      {(!isDataEmpty && !isLoading) && <div className="flex-grow flex flex-col items-center justify-center">
         <Checklist />
         <div className="mt-2 flex gap-4">
           <button className="bg-red-600 text-white font-semibold px-4 py-2 rounded" onClick={handleClearList}>Delete All Tasks</button>
@@ -98,7 +113,7 @@ export default function Home() {
         </div>
       </div>}
       {
-        isDataEmpty &&
+        (isDataEmpty && !isLoading) &&
         <div>
           <AddOnList isOpen={isDataEmpty} onClose={() => setIsDataEmpty(false)}>
             <h1 className="text-3xl font-bold text-neutral-800 text-center">Welcome to TravKit</h1>
@@ -152,6 +167,7 @@ export default function Home() {
           </AddOnList>
         </div>
       }
+      {isLoading && <GlobePage />}
     </div>
   );
 }
