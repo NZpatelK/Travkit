@@ -13,8 +13,6 @@ import { motion } from "framer-motion";
 export default function Home() {
   const [isDataEmpty, setIsDataEmpty] = useState(true);
   const [AddOnListData, setAddOnListData] = useState<Category[]>([]);
-  const [refreshFlag, setRefreshFlag] = useState(false);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,8 +38,6 @@ export default function Home() {
   const handleClearCompleted = async () => {
     // Logic to clear completed tasks
     await resetIsCompleted();
-    setRefreshFlag(prev => !prev);
-    console.log(refreshFlag);
     toast.success("Completed tasks cleared!");
   };
 
@@ -56,11 +52,11 @@ export default function Home() {
   }
 
   const handleCreateList = async () => {
-    if (AddOnListData.length === 0) {
+    if(AddOnListData.length === 0) {
       toast.error("Please add at least one list");
       return;
     }
-
+    
     await seedDataIfEmpty(AddOnListData);
     toast.success("List created!");
     setAddOnListData([]);
@@ -78,7 +74,7 @@ export default function Home() {
       </div>
 
       {!isDataEmpty && <div className="flex-grow flex flex-col items-center justify-center">
-        <Checklist refreshFlag={refreshFlag} />
+        <Checklist />
         <div className="mt-2 flex gap-4">
           <button className="bg-red-600 text-white font-semibold px-4 py-2 rounded" onClick={handleClearList}>Delete All Tasks</button>
           <button className="bg-gray-600 text-white font-semibold px-4 py-2 rounded" onClick={handleClearCompleted}>Clear Completed</button>
