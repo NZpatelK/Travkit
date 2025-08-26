@@ -47,6 +47,17 @@ export async function allLists() {
   return data;
 }
 
+export async function resetIsCompleted() {
+  const { error } = await supabase
+    .from("list")
+    .update({ is_completed: false })
+    .not("id", "is", null); // matches all rows
+
+  if (error) {
+    toast.error(error.message);
+  }
+}
+
 
 export async function updateIsCompleted(id: string | number, is_completed: boolean) {
   const { data, error } = await supabase
