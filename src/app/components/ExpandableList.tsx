@@ -105,20 +105,20 @@ export default function ExpandableList({ updatedProgress }: ExpandableListProps)
             {categoriesWithLists?.map((category, index) => (
                 <div
                     key={category.id ?? index}
-                    className="border-2 border-violet-400 rounded-lg mb-2 overflow-hidden shadow-md"
+                    className={`border-2 ${calculateTotalCompleted(category) === category.list.length ? 'border-green-400 ' : 'border-violet-400 '} rounded-lg mb-2 overflow-hidden shadow-md transition-all`}
                 >
                     <button
-                        className="w-full text-left p-4 bg-violet-100 hover:bg-violet-200 transition-colors flex justify-between items-center"
+                        className={`w-full text-left p-4 ${calculateTotalCompleted(category) === category.list.length ? 'bg-green-100 hover:bg-green-200'  : 'bg-violet-100 hover:bg-violet-200'} transition-colors flex justify-between items-center`}
                         onClick={() => toggleItem(index)}
                     >
                         <span className="font-semibold text-neutral-700 capitalize">{category.title}</span>
                         <div className="flex items-center">
                             <div className="bg-white rounded-full p-1 px-4 mr-4 flex items-center justify-center">
-                                <span className="text-violet-600 text-xs font-semibold">
+                                <span className={`${calculateTotalCompleted(category) === category.list.length ? 'text-green-600' : 'text-violet-600'} text-xs font-semibold transition-all`}>
                                     {calculateTotalCompleted(category)}   / {category.list.length}
                                 </span>
                             </div>
-                            <span className="text-violet-600">{expandedItems[index] ? '−' : '+'}</span>
+                            <span className={`${calculateTotalCompleted(category) === category.list.length ? 'text-green-600' : 'text-violet-600'} transition-all`}>{expandedItems[index] ? '−' : '+'}</span>
                         </div>
                     </button>
                     <div

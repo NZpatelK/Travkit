@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useConfetti } from "@/app/hooks/useConfetti";
+
 
 interface ProgressBarProps {
     progressNum?: number; // externally passed progress (0–100)
@@ -6,6 +8,8 @@ interface ProgressBarProps {
 
 export default function ProgressBar({ progressNum = 0 }: ProgressBarProps) {
     const [progress, setProgress] = useState(0);
+    const { fire } = useConfetti();
+
 
     useEffect(() => {
         if (typeof progressNum !== 'number') return;
@@ -26,12 +30,17 @@ export default function ProgressBar({ progressNum = 0 }: ProgressBarProps) {
                     return progressNum;
                 }
 
+                if (next.toFixed(0) as unknown as number >= 100) {
+                    fire();
+                }
+
                 return next;
             });
-        }, 50); 
 
-        return () => clearInterval(interval); 
-    }, [progressNum]);
+        }, 50);
+
+        return () => clearInterval(interval);
+    }, [fire, progressNum]);
 
     return (
         <div className="w-full bg-white rounded-full h-6 drop-shadow-lg p-4 flex items-center justify-between">
