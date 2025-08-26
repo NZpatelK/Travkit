@@ -28,7 +28,7 @@ You can easily track what you’ve packed, what still needs to be prepared, and 
 
 ## 🎥 Demo
 
-[Watch the demo video here](#) <!-- replace # with your video link -->
+[Watch the demo video here](https://www.linkedin.com/posts/karan-h-patel_nextjs-react-typescript-activity-7366229848324759554-EXxS?utm_source=share&utm_medium=member_desktop&rcm=ACoAADBGF6QB0QMDySUwhCV0IdNp7xgY9h60CLQ) <!-- replace # with your video link -->
 
 ---
 
