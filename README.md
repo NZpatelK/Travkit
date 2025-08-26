@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌍 TravKit
 
-## Getting Started
+**TravKit** is a universal travel checklist app that helps you remember all the essential items and tasks you need for your trips.  
+No more stressing over what to pack or forgetting important things — TravKit comes with pre-built checklist templates categorized for convenience.  
 
-First, run the development server:
+You can easily track what you’ve packed, what still needs to be prepared, and even reminders for bookings or reservations.  
+
+---
+
+## ✨ Features
+
+- ✅ **Universal standard checklist** for travel essentials  
+- 📂 **Pre-built category templates** (no need to start from scratch)  
+- 📝 **Customizable lists** to fit your needs  
+- ⏳ **Track progress** as you pack or prepare  
+- 🔔 **Reminders** so you won’t forget anything important  
+
+---
+
+## 🛠 Tech Stack
+
+- **Frontend:** [Next.js](https://nextjs.org/) + [React](https://react.dev/)  
+- **Language:** TypeScript  
+- **Styling:** Tailwind CSS  
+- **Database:** [Supabase](https://supabase.com/)  
+
+---
+
+## 🎥 Demo
+
+[Watch the demo video here](#) <!-- replace # with your video link -->
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js (v18+ recommended)  
+- Supabase account & project  
+
+### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/yourusername/travkit.git
+
+# Go into the project folder
+cd travkit
+
+# Install dependencies
+npm install
+
+# Run the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+````
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Your app should now be running at **[http://localhost:3000](http://localhost:3000)** 🎉
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📌 Roadmap
 
-## Learn More
+* 🔐 User authentication with Supabase
+* ☁️ Sync checklist across devices
+* 📱 Mobile-friendly PWA support
+* 🌐 Multi-language support
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🤝 Contributing
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Contributions, issues, and feature requests are welcome!
+Feel free to check out the [issues page](../../issues) or submit a pull request.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📜 License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is licensed under the **MIT License**.
+See the [LICENSE](./LICENSE) file for details.
+
