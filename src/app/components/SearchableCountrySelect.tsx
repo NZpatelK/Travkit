@@ -10,12 +10,17 @@ interface CountryOption {
   label: string;
 }
 
-export default function SearchableCountrySelect() {
-  const [selectedCountry, setSelectedCountry] = useState<CountryOption | null>(null);
+interface SearchableCountrySelectProps {
+  setSelectedCountry: (country: CountryOption | null) => void;
+  selectedCountry: CountryOption | null;
+}
+
+export default function SearchableCountrySelect({ setSelectedCountry, selectedCountry }: SearchableCountrySelectProps) {
+  // const [selectedCountry, setSelectedCountry] = useState<CountryOption | null>(null);
 
   // Map countries to React Select options with emoji flags
   const options: CountryOption[] = Object.entries(countries).map(([code, data]) => ({
-    value: code,
+    value: data.name,
     label: `${getEmojiFlag(code)} ${data.name}`,
   }));
 

@@ -11,9 +11,18 @@ import TemplateCard from "./components/TemplateCard";
 import { motion } from "framer-motion";
 import { useRefresh } from "./context/RefreshContext";
 
+interface CountryOption {
+  value: string;
+  label: string;
+}
+
+
 export default function Home() {
   const [isDataEmpty, setIsDataEmpty] = useState(true);
   const [AddOnListData, setAddOnListData] = useState<Category[]>([]);
+  const [inputDuration, setInputDuration] = useState<number | "">("");
+  const [selectedCountry, setSelectedCountry] = useState<CountryOption | null>(null);
+
   const { triggerRefresh } = useRefresh();
 
 
@@ -61,7 +70,7 @@ export default function Home() {
       return;
     }
 
-    await seedDataIfEmpty(AddOnListData);
+    await seedDataIfEmpty(AddOnListData, selectedCountry?.value ?? "", inputDuration as number);
     toast.success("List created!");
     setAddOnListData([]);
     setIsDataEmpty(false);
@@ -97,7 +106,7 @@ export default function Home() {
               <div className="max-w-md mx-auto p-5 space-y-6">
                 <div className="flex flex-col">
                   <label className="mb-2 text-gray-700 font-semibold">Travel To:</label>
-                  <SearchableCountrySelect />
+                  <SearchableCountrySelect setSelectedCountry={setSelectedCountry} selectedCountry={selectedCountry} />
                 </div>
 
                 <div className="flex flex-col">
@@ -106,6 +115,8 @@ export default function Home() {
                     type="number"
                     placeholder="Enter number of days"
                     className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    value={inputDuration}
+                    onChange={(e) => setInputDuration(parseInt(e.target.value))}
                   />
                 </div>
               </div>
