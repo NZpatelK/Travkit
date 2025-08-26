@@ -78,7 +78,7 @@ export default function Home() {
       toast.error("Please select a country");
       return;
     }
-    if(!inputDuration || inputDuration <= 1) {
+    if (!inputDuration || inputDuration <= 1) {
       toast.error("Please enter a valid duration. Must be greater than 1.");
       return;
     }
@@ -91,7 +91,7 @@ export default function Home() {
     setInputDuration("");
     setSelectedCountry(null);
     setIsDataEmpty(false);
-    
+
     setIsLoading(false);
   }
 
@@ -108,9 +108,27 @@ export default function Home() {
       {(!isDataEmpty && !isLoading) && <div className="flex-grow flex flex-col items-center justify-center">
         <Checklist />
         <div className="mt-2 flex gap-4">
-          <button className="bg-red-600 text-white font-semibold px-4 py-2 rounded" onClick={handleClearList}>Delete All Tasks</button>
-          <button className="bg-gray-600 text-white font-semibold px-4 py-2 rounded" onClick={handleClearCompleted}>Clear Completed</button>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95, rotate: -2 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-3 rounded shadow-md transition-colors duration-200"
+            onClick={handleClearList}
+          >
+            Delete All Tasks
+          </motion.button>
+
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95, rotate: 2 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-6 py-3 rounded shadow-md transition-colors duration-200"
+            onClick={handleClearCompleted}
+          >
+            Clear Completed
+          </motion.button>
         </div>
+
       </div>}
       {
         (isDataEmpty && !isLoading) &&
