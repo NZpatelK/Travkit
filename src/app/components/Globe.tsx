@@ -12,7 +12,7 @@ import ThreeGlobe from "three-globe";
 
 export default function GlobePage() {
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-transparent text-white">
       <div className="relative h-[70vh] md:h-[78vh] lg:h-[82vh]">
         <GlobeCanvas />
         <div className="pointer-events-none absolute inset-x-0 bottom-4 flex justify-center">
