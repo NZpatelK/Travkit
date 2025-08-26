@@ -70,9 +70,11 @@ export default function Home() {
       return;
     }
 
-    await seedDataIfEmpty(AddOnListData, selectedCountry?.value ?? "", inputDuration as number);
+    await seedDataIfEmpty(AddOnListData, selectedCountry?.label ?? "", inputDuration as number);
     toast.success("List created!");
     setAddOnListData([]);
+    setInputDuration("");
+    setSelectedCountry(null);
     setIsDataEmpty(false);
   }
 

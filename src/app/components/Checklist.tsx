@@ -3,15 +3,25 @@ import Image from "next/image";
 import ProgressBar from "./ProgessBar";
 import ExpandableList from "./ExpandableList";
 import { useEffect, useState } from "react";
-import { allLists } from "../utils/supabase/client";
+import { allLists, getTravelDetail } from "../utils/supabase/client";
+
+interface travelProp {
+    travel_to: string;
+    duration: number;
+}
 
 
 export default function Checklist() {
     const [totalCompletedLists, setTotalCompletedLists] = useState(0);
+    const [travelDetails, setTravelDetails] = useState<travelProp | null>(null);
 
     useEffect(() => {
         const fetchTotalCompletedLists = async () => {
             await handleFetchTotalCompletedLists();
+            const data = await getTravelDetail() as travelProp | null;
+            if (data) {
+                setTravelDetails(data);
+            }
         }
 
         fetchTotalCompletedLists();
@@ -37,9 +47,9 @@ export default function Checklist() {
 
                 <div>
                     <h3 className="absolute bottom-11 left-5 text-2xl font-extrabold capitalize text-gray-800 z-20 drop-shadow-md">
-                        Dubai Trip Checklist
+                        {travelDetails?.travel_to} Trip Checklist
                     </h3>
-                    <p className="text-neutral-900 text-sm z-20 absolute bottom-7 left-5">Duration: 5 days</p>
+                    <p className="text-neutral-900 text-sm z-20 absolute bottom-7 left-5">Duration: {travelDetails?.duration} days</p>
                 </div>
                 <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 z-20 w-10/12 sm:w-3/5 transition-all">
                     <ProgressBar progressNum={totalCompletedLists} />

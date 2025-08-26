@@ -6,6 +6,15 @@ export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
+export async function getTravelDetail(){
+  const { data, error } = await supabase
+    .from('travel')
+    .select('id, travel_to, duration');
+
+  if (error) toast.error(error.message);
+  return data ? data[0] : null;
+}
+
 export async function getCategoriesWithLists() {
   const { data, error } = await supabase
     .from('categories')
