@@ -16,7 +16,6 @@ interface SearchableCountrySelectProps {
 }
 
 export default function SearchableCountrySelect({ setSelectedCountry, selectedCountry }: SearchableCountrySelectProps) {
-  // const [selectedCountry, setSelectedCountry] = useState<CountryOption | null>(null);
 
   // Map countries to React Select options with emoji flags
   const options: CountryOption[] = Object.entries(countries).map(([code, data]) => ({
