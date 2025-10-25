@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-// @ts-ignore — three-globe has no default types
+// @ts-expect-error — three-globe has no default types
 import ThreeGlobe from "three-globe";
 
 // Full-screen, animated GitHub-style globe component for Next.js App Router (15+)
