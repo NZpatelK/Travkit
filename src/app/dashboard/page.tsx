@@ -117,7 +117,7 @@ export default function Dashboard() {
         <h1 className="text-3xl font-semibold">TravKit</h1>
         <button
           onClick={handleLogout}
-          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded shadow-md"
+          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded shadow-md z-9999 cursor-pointer transition-colors duration-200"
         >
           Logout
         </button>

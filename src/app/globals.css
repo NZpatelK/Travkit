@@ -66,3 +66,76 @@ body {
   border-bottom: 20px solid transparent;
   background-clip: padding-box;
 }
+
+
+
+/* --------------- */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes fly {
+  0% {
+    transform: translateX(-150vw) translateY(0) rotate(0deg);
+  }
+  100% {
+    transform: translateX(150vw) translateY(-20px) rotate(2deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    transform: translateX(-100px);
+  }
+  100% {
+    transform: translateX(200px);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes float-delay {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-25px);
+  }
+}
+
+.animate-fly {
+  animation: fly 6s linear infinite;
+}
+
+.animate-dash {
+  animation: dash 1.5s linear infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delay {
+  animation: float 8s ease-in-out infinite 1s;
+}
+
+.animate-float-slow {
+  animation: float 10s ease-in-out infinite 2s;
+}

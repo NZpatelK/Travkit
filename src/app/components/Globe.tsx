@@ -1,225 +1,95 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-// @ts-expect-error — three-globe has no default types
-import ThreeGlobe from "three-globe";
+import React from "react";
+import { motion, useAnimation } from "framer-motion";
 
-// Full-screen, animated GitHub-style globe component for Next.js App Router (15+)
-// Drop this file anywhere (e.g., src/app/globe/page.tsx) — it exports a page component.
-// npm i three three-globe
+type PlaneLoaderProps = {
+  size?: number; // base width in px (responsive max)
+  duration?: number; // seconds for one left->right pass
+};
 
-export default function GlobePage() {
+export default function PlaneLoader({ size = 220, duration = 4 }: PlaneLoaderProps) {
+  const controls = useAnimation();
+
+  React.useEffect(() => {
+    // start a looping animation (framer-motion handles loop naturally)
+    controls.start({ x: ["-110%", "110%"], rotate: [ -6, 6, -6 ], transition: { duration, ease: "linear", repeat: Infinity } });
+  }, [controls, duration]);
+
   return (
-    <div className="min-h-screen bg-transparent text-white">
-      <div className="relative h-[70vh] md:h-[78vh] lg:h-[82vh]">
-        <GlobeCanvas />
-        <div className="pointer-events-none absolute inset-x-0 bottom-4 flex justify-center">
-          <p className="text-xs md:text-sm opacity-70 bg-black/40 rounded-full px-3 py-1 backdrop-blur">
-            Drag to orbit • Scroll to zoom • Inertia on
-          </p>
+    <div className="fixed inset-0 flex items-center justify-center bg-transparent pointer-events-none">
+      <div className="flex flex-col items-center justify-center pointer-events-auto" style={{ width: size }}>
+        <div className="relative w-full h-36 md:h-44">
+          {/* motion wrapper moves the plane along a horizontal track and adds a tilt animation */}
+          <motion.div
+            animate={controls}
+            initial={{ x: "-110%", y: 0 }}
+            style={{ position: "absolute", top: "50%", left: "0%", translateY: "-50%" }}
+          >
+            <div className="flex items-center space-x-3">
+              {/* Soft shadow under plane */}
+              <div className="relative">
+                <svg
+                  viewBox="0 0 300 100"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden
+                  role="img"
+                  className="block w-full max-w-[220px] h-auto"
+                >
+                  {/* Plane silhouette (A380-inspired, simplified) */}
+                  <g transform="translate(0,10) scale(0.9)">
+                    <path d="M10 50 C40 45 80 42 120 42 C140 42 160 45 190 50 C200 52 220 55 240 55 C250 55 270 52 285 48 L290 46 L295 46 L294 44 C290 36 270 30 250 28 C240 27 220 26 210 24 C195 21 180 18 160 18 C140 18 120 20 100 26 C70 36 40 48 10 50 Z" fill="#E6EEF8" />
+                    {/* windows row */}
+                    <g fill="#0F172A" opacity="0.6">
+                      {Array.from({ length: 12 }).map((_, i) => (
+                        <rect key={i} x={70 + i * 10} y={30} width={4} height={3} rx={1} />
+                      ))}
+                    </g>
+                    {/* cockpit */}
+                    <path d="M8 46 C18 40 34 36 48 36 L56 36 C50 40 30 50 8 50 Z" fill="#CDE6FF" opacity="0.9" />
+                    {/* engines (double-deck feel) */}
+                    <g transform="translate(120,40)">
+                      <ellipse cx="12" cy="8" rx="12" ry="6" fill="#B0CFE6" />
+                      <ellipse cx="38" cy="8" rx="12" ry="6" fill="#B0CFE6" />
+                    </g>
+                  </g>
+                </svg>
+
+                {/* subtle blurred shadow under plane */}
+                <div className="absolute left-1/2 transform -translate-x-1/2 bottom-[-12px] w-40 h-6 rounded-full opacity-40 filter blur-sm" style={{ background: "radial-gradient(ellipse at center, rgba(3,7,18,0.35), rgba(3,7,18,0.05))" }} />
+              </div>
+            </div>
+          </motion.div>
+
+          {/* subtle path guide (decorative) */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 40" preserveAspectRatio="none">
+            <path d="M0 26 C25 8, 75 8, 100 26" stroke="#CBD5E1" strokeWidth="0.3" fill="none" strokeDasharray="2 2" opacity="0.8" />
+          </svg>
+        </div>
+
+        {/* loading text below plane */}
+        <div className="mt-4 text-center">
+          <div className="text-xs md:text-sm text-slate-500">Loading — Preparing flight</div>
         </div>
       </div>
     </div>
   );
 }
 
-function GlobeCanvas() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+/*
+Usage:
 
-  useEffect(() => {
-    if (!containerRef.current) return;
+Import and render <PlaneLoader /> inside a client component (e.g., in your page's layout or a loading screen in /app). Example:
 
-    // Scene & camera
-    const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x000000, 0.0008);
+"use client";
+import PlaneLoader from "./components/PlaneLoader";
 
-    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 2000);
-    camera.position.set(0, 120, 360);
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
-    renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight);
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-    containerRef.current.appendChild(renderer.domElement);
-    rendererRef.current = renderer;
-
-    // Lights
-    scene.add(new THREE.AmbientLight(0xffffff, 0.8));
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
-    dirLight.position.set(200, 200, 200);
-    scene.add(dirLight);
-
-    // Globe
-    const globe = new (ThreeGlobe as any)()
-      .globeImageUrl(
-        // You can mirror this asset into /public for production stability
-        "https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
-      )
-      .bumpImageUrl("https://unpkg.com/three-globe/example/img/earth-topology.png")
-      .showAtmosphere(true)
-      .atmosphereAltitude(0.22)
-      .atmosphereColor("#61dafb");
-
-    // Add a subtle glow sphere (inside-out)
-    const glowGeom = new THREE.SphereGeometry(100, 64, 64);
-    const glowMat = new THREE.MeshBasicMaterial({
-      color: new THREE.Color("#61dafb"),
-      transparent: true,
-      opacity: 0.08,
-      side: THREE.BackSide,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-    });
-    const glowMesh = new THREE.Mesh(glowGeom, glowMat);
-    glowMesh.scale.setScalar(1.35);
-
-    // Stars background
-    const starsGeom = new THREE.BufferGeometry();
-    const starCount = 2000;
-    const positions = new Float32Array(starCount * 3);
-    for (let i = 0; i < starCount; i++) {
-      const r = 1200; // distance
-      const theta = Math.acos(THREE.MathUtils.randFloatSpread(2));
-      const phi = THREE.MathUtils.randFloat(0, 2 * Math.PI);
-      positions[i * 3] = r * Math.sin(theta) * Math.cos(phi);
-      positions[i * 3 + 1] = r * Math.cos(theta);
-      positions[i * 3 + 2] = r * Math.sin(theta) * Math.sin(phi);
-    }
-    starsGeom.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-    const stars = new THREE.Points(
-      starsGeom,
-      new THREE.PointsMaterial({ size: 1.1, sizeAttenuation: true })
-    );
-
-    // Sample arcs (like GitHub globe connections)
-    const arcs = sampleArcs();
-    globe
-      .arcsData(arcs)
-      .arcColor((d: any) => d.color)
-      .arcAltitude((d: any) => d.altitude)
-      .arcStroke((d: any) => d.stroke)
-      .arcDashLength(0.35)
-      .arcDashGap(0.7)
-      .arcDashInitialGap((d: any) => Math.random())
-      .arcDashAnimateTime((d: any) => 1200 + Math.random() * 2200);
-
-    // Points / locations
-    const points = arcs.flatMap((a) => [
-      { lat: a.startLat, lng: a.startLng, size: 0.6, color: "#ffffff" },
-      { lat: a.endLat, lng: a.endLng, size: 0.6, color: "#ffffff" },
-    ]);
-    globe
-      .pointsData(points)
-      .pointAltitude((d: any) => 0.02 + d.size * 0.01)
-      .pointColor((d: any) => d.color)
-      .pointRadius(0.3);
-
-    const globeObj = globe as unknown as THREE.Object3D;
-    globeObj.scale.setScalar(1.05);
-
-    scene.add(globeObj);
-    scene.add(glowMesh);
-    scene.add(stars);
-
-    // Controls
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.06;
-    controls.enablePan = false;
-    controls.rotateSpeed = 0.45;
-    controls.minDistance = 160;
-    controls.maxDistance = 550;
-
-    // Slow auto-rotation w/ pause on user interaction
-    let autoRotate = true;
-    let lastInteraction = Date.now();
-    const interact = () => {
-      lastInteraction = Date.now();
-      autoRotate = false;
-    };
-    ["mousedown", "wheel", "touchstart", "pointerdown"].forEach((e) => {
-      renderer.domElement.addEventListener(e, interact, { passive: true });
-    });
-
-    // Resize
-    const resize = () => {
-      if (!containerRef.current) return;
-      const { clientWidth, clientHeight } = containerRef.current;
-      renderer.setSize(clientWidth, clientHeight);
-      camera.aspect = clientWidth / clientHeight;
-      camera.updateProjectionMatrix();
-    };
-    const ro = new ResizeObserver(resize);
-    ro.observe(containerRef.current);
-
-    // Animate
-    let frameId = 0;
-    const animate = () => {
-      frameId = requestAnimationFrame(animate);
-      const now = Date.now();
-      if (!autoRotate && now - lastInteraction > 2400) autoRotate = true;
-      if (autoRotate) globeObj.rotation.y += 0.0016; // gentle spin
-      controls.update();
-      renderer.render(scene, camera);
-    };
-    animate();
-
-    // Cleanup
-    return () => {
-      cancelAnimationFrame(frameId);
-      ro.disconnect();
-      ["mousedown", "wheel", "touchstart", "pointerdown"].forEach((e) => {
-        renderer.domElement.removeEventListener(e, interact as any);
-      });
-      controls.dispose();
-      starsGeom.dispose();
-      glowGeom.dispose();
-      glowMat.dispose();
-      renderer.dispose();
-      if (renderer.domElement.parentElement) {
-        renderer.domElement.parentElement.removeChild(renderer.domElement);
-      }
-    };
-  }, []);
-
-  return <div ref={containerRef} className="absolute inset-0" />;
+export default function Loading() {
+  return <PlaneLoader size={260} duration={5} />;
 }
 
-// Simple synthetic routes between major hubs
-function sampleArcs() {
-  const hubs = [
-    { city: "San Francisco", lat: 37.7749, lng: -122.4194 },
-    { city: "New York", lat: 40.7128, lng: -74.006 },
-    { city: "London", lat: 51.5074, lng: -0.1278 },
-    { city: "Berlin", lat: 52.52, lng: 13.405 },
-    { city: "Tokyo", lat: 35.6895, lng: 139.6917 },
-    { city: "Sydney", lat: -33.8688, lng: 151.2093 },
-    { city: "Singapore", lat: 1.3521, lng: 103.8198 },
-    { city: "São Paulo", lat: -23.5505, lng: -46.6333 },
-    { city: "Johannesburg", lat: -26.2041, lng: 28.0473 },
-    { city: "Auckland", lat: -36.8485, lng: 174.7633 },
-  ];
-
-  const pick = (arr: any[]) => arr[Math.floor(Math.random() * arr.length)];
-  const colors = ["#22d3ee", "#7dd3fc", "#60a5fa", "#a78bfa"];
-
-  const arcs = Array.from({ length: 40 }, () => {
-    const a = pick(hubs);
-    let b = pick(hubs);
-    while (b === a) b = pick(hubs);
-    return {
-      startLat: a.lat,
-      startLng: a.lng,
-      endLat: b.lat,
-      endLng: b.lng,
-      color: pick(colors),
-      altitude: 0.08 + Math.random() * 0.22,
-      stroke: 0.6 + Math.random() * 0.6,
-    };
-  });
-
-  return arcs;
-}
+Notes:
+- This component is 'client' only and uses framer-motion for smooth, high-performance animation.
+- Tailwind CSS classes are used for layout. Adjust `size` prop for different base widths; it's responsive.
+- The SVG plane is a stylized A380-inspired silhouette (not a photograph) and animated across the center of the viewport.
+*/
