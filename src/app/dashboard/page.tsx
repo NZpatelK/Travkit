@@ -113,7 +113,7 @@ export default function Dashboard() {
     <div className="h-screen flex flex-col">
       <Toaster position="top-right" reverseOrder={true} />
 
-      <div className="ml-10 mt-10 flex items-center justify-between">
+      <div className="mx-10 mt-10 flex items-center justify-between">
         <h1 className="text-3xl font-semibold">TravKit</h1>
         <button
           onClick={handleLogout}
