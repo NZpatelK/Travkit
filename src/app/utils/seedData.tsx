@@ -22,9 +22,13 @@ export async function seedDataIfEmpty(categories: Category[], travelTo: string, 
 
     if ((catCount ?? 0) === 0 && (listCount ?? 0) === 0 && (travelCount ?? 0) === 0) {
       // Insert travel record
+      const { data: userData, error: userError } = await supabase.auth.getUser();
+      if (userError) throw new Error(`Error fetching user: ${JSON.stringify(userError)}`);
+      const userId = userData?.user?.id ?? null;
+
       const { data: travelData, error: travelError } = await supabase
         .from('travel')
-        .insert({ travel_to: travelTo, duration: duration.toString() })
+        .insert({ travel_to: travelTo, duration: duration.toString(), user_id: userId })
         .select()
         .single();
 
