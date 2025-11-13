@@ -76,20 +76,3 @@ export default function PlaneLoader({ size = 220, duration = 4 }: PlaneLoaderPro
   );
 }
 
-/*
-Usage:
-
-Import and render <PlaneLoader /> inside a client component (e.g., in your page's layout or a loading screen in /app). Example:
-
-"use client";
-import PlaneLoader from "./components/PlaneLoader";
-
-export default function Loading() {
-  return <PlaneLoader size={260} duration={5} />;
-}
-
-Notes:
-- This component is 'client' only and uses framer-motion for smooth, high-performance animation.
-- Tailwind CSS classes are used for layout. Adjust `size` prop for different base widths; it's responsive.
-- The SVG plane is a stylized A380-inspired silhouette (not a photograph) and animated across the center of the viewport.
-*/
