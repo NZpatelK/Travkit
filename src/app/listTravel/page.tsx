@@ -1,10 +1,29 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { JSX, useEffect, useState } from "react";
+import { getAllTravelData } from "../utils/supabase/client";
 
-export default function ChecklistPage(): JSX.Element {
+interface TravelProps {
+    travel_to: string;
+    id: number;
+}
+
+export default function TravelDashboard(): JSX.Element {
   const [items, setItems] = useState<string[]>([]);
   const [nextIndex, setNextIndex] = useState<number>(1);
+
+  useEffect(() => {
+    const fetchTravelData = async () => {
+      const data = await getAllTravelData();
+      if (data) {
+        const itemLabels = data.map((item: TravelProps) => item.travel_to); // assuming 'travel_to' is a field
+        setItems(itemLabels);
+        setNextIndex(itemLabels.length + 1);
+        console.log('Fetched travel data:', itemLabels);
+      }
+    };
+    fetchTravelData();
+  }, []);
 
   function createNewItem() {
     const newItem = `Item ${nextIndex}`;

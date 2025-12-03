@@ -6,13 +6,65 @@ export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-export async function getTravelDetail(){
+export async function getTravelDetail() {
+  // First get the user ID
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError) {
+    toast.error(userError.message);
+    return null;
+  }
+
+  if (!user) {
+    toast.error("No user logged in");
+    return null;
+  }
+
+  // Now query using the actual user ID (not a Promise)
   const { data, error } = await supabase
-    .from('travel')
-    .select('id, travel_to, duration');
+    .from("travel")
+    .select("id, travel_to, duration")
+    .eq("user_id", user.id);
 
   if (error) toast.error(error.message);
-  return data ? data[0] : null;
+
+  return data?.[0] ?? null;
+}
+
+
+export async function getAllTravelData() {
+  // Get the user first
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError) {
+    toast.error(userError.message);
+    return null;
+  }
+
+  if (!user) {
+    toast.error("No user logged in");
+    return null;
+  }
+
+  // Now fetch travel data
+  const { data, error } = await supabase
+    .from("travel")
+    .select("*")
+    .eq("user_id", user.id);
+
+  if (error) {
+    toast.error(error.message);
+    return null;
+  }
+
+  console.log("All travel data:", data);
+  return data ?? [];
 }
 
 export async function getCategoriesWithLists() {
