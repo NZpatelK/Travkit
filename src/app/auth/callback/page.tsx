@@ -14,7 +14,7 @@ export default function AuthCallbackPage() {
         console.error("Auth error:", error);
         router.replace("/login");
       } else {
-        router.replace("/listTravel");
+        router.replace("/dashboard");
       }
     }
     handleAuth();

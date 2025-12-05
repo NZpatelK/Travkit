@@ -32,6 +32,8 @@ export async function seedDataIfEmpty(categories: Category[], travelTo: string, 
         .select()
         .single();
 
+      alert(userId);
+
       if (travelError || !travelData) throw new Error(`Travel insert error: ${JSON.stringify(travelError)}`);
 
       const travelId = travelData.id;
@@ -77,7 +79,7 @@ export async function seedDataIfEmpty(categories: Category[], travelTo: string, 
 
       return { seeded: true, travelId };
     }
-
+    alert ('Data already seeded');
     return { seeded: false };
   } catch (err) {
     if (err instanceof Error) throw err;
