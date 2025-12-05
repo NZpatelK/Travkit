@@ -12,7 +12,6 @@ interface TravelProps {
 
 export default function TravelDashboard(): JSX.Element {
   const [items, setItems] = useState<string[]>([]);
-  const [nextIndex, setNextIndex] = useState<number>(1);
 
   const router = useRouter();
 
@@ -22,7 +21,6 @@ export default function TravelDashboard(): JSX.Element {
       if (data) {
         const itemLabels = data.map((item: TravelProps) => item.travel_to); // assuming 'travel_to' is a field
         setItems(itemLabels);
-        setNextIndex(itemLabels.length + 1);
         console.log('Fetched travel data:', itemLabels);
       }
     };
@@ -52,6 +50,7 @@ export default function TravelDashboard(): JSX.Element {
             <button
               onClick={createNewItem}
               className="inline-flex items-center bg-neutral-800 gap-2 px-4 py-2 rounded-lg shadow-sm border border-transparent hover:shadow-md transition"
+              disabled={items.length >= 5}
             >
               + Create new item
             </button>
