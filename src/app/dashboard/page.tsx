@@ -3,6 +3,8 @@
 import React, { JSX, useEffect, useState } from "react";
 import { getAllTravelData } from "../utils/supabase/client";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+
 
 
 interface TravelProps {
@@ -29,10 +31,6 @@ export default function TravelDashboard(): JSX.Element {
     };
     fetchTravelData();
   }, []);
-
-  function handleClickItem(id: string){
-    alert(`Clicked item with id: ${id}`);
-  }
 
   function createNewItem() {
     // const newItem = `Item ${nextIndex}`;
@@ -70,22 +68,25 @@ export default function TravelDashboard(): JSX.Element {
           ) : (
             <ul className="space-y-3">
               {travelData.map((item, idx) => (
-                <li
-                  key={item.id + "-" + idx}
-                  className="flex items-center justify-between p-3 rounded-lg border border-slate-300 hover:bg-slate-50 transition"
-                  onClick={() => handleClickItem(item.id.toString())}
-                >
-                  <div className="text-base text-slate-600">{item.travel_to}</div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => removeItem(idx)}
-                      aria-label={`Remove ${item.travel_to}`}
-                      className="text-sm px-3 py-1 text-rose-600 rounded-md hover:bg-slate-100 transition"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </li>
+                <Link href={`/dashboard/checklist/${item.id}`} key={item.id + "-" + idx}
+                  className="flex p-3 rounded-lg border border-slate-300 hover:bg-slate-50 transition">
+
+                  <li
+                    key={item.id + "-" + idx}
+                    className="flex flex-col md:flex-row md:justify-between md:items-center w-full gap-2"
+                  >
+                    <div className="text-base text-slate-600">{item.travel_to}</div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => removeItem(idx)}
+                        aria-label={`Remove ${item.travel_to}`}
+                        className="text-sm px-3 py-1 text-rose-600 rounded-md hover:bg-slate-100 transition"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </li>
+                </Link>
               ))}
             </ul>
           )}

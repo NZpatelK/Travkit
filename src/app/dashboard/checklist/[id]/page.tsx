@@ -2,25 +2,22 @@
 
 import Checklist from "@/app/components/Checklist";
 import { useEffect, useState } from "react";
-import { clearAllData, seedDataIfEmpty } from "@/app/utils/seedData";
+import { clearAllData} from "@/app/utils/seedData";
 import toast, { Toaster } from "react-hot-toast";
 import { allLists, resetIsCompleted } from "@/app/utils/supabase/client";
-import AddOnList from "@/app/components/AddOnList";
-import SearchableCountrySelect from "@/app/components/SearchableCountrySelect";
-import { Category, travelData } from "@/app/data/travelData";
-import TemplateCard from "@/app/components/TemplateCard";
 import { motion } from "framer-motion";
 import { useRefresh } from "@/app/context/RefreshContext";
 import GlobePage from "@/app/components/Globe";
 import { supabase } from "@/app/utils/supabase/client"; // <- Add Supabase client
 import { useRouter } from "next/navigation";
 
-interface CountryOption {
-  value: string;
-  label: string;
-}
+type Props = {
+  params: {
+    id: string;
+  };
+};
 
-export default function Dashboard() {
+export default function ChecklistPage({ params }: Props) {
   const [isDataEmpty, setIsDataEmpty] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState<any>(null);
@@ -99,7 +96,8 @@ export default function Dashboard() {
 
       {(!isDataEmpty && !isLoading) && (
         <div className="flex-grow flex flex-col items-center justify-center">
-          <Checklist />
+          {/* <Checklist /> */}
+          <h1>{params.id}</h1>
           <div className="mt-2 flex gap-4">
             <motion.button
               whileHover={{ scale: 1.1 }}
