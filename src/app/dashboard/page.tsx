@@ -33,9 +33,6 @@ export default function TravelDashboard(): JSX.Element {
   }, []);
 
   function createNewItem() {
-    // const newItem = `Item ${nextIndex}`;
-    // setItems((prev) => [...prev, newItem]);
-    // setNextIndex((i) => i + 1);
     router.push("/createTravelChecklist");
   }
 
