@@ -10,15 +10,18 @@ interface travelProp {
     duration: number;
 }
 
+type Props = {
+    travelId: string;
+};
 
-export default function Checklist() {
+export default function Checklist({ travelId }: Props) {
     const [totalCompletedLists, setTotalCompletedLists] = useState(0);
     const [travelDetails, setTravelDetails] = useState<travelProp | null>(null);
 
     useEffect(() => {
         const fetchTotalCompletedLists = async () => {
             await handleFetchTotalCompletedLists();
-            const data = await getTravelDetail() as travelProp | null;
+            const data = await getTravelDetail(travelId) as travelProp | null;
             if (data) {
                 setTravelDetails(data);
             }

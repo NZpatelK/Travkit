@@ -6,7 +6,7 @@ export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-export async function getTravelDetail() {
+export async function getTravelDetail(travelId: string) {
   // First get the user ID
   const {
     data: { user },
@@ -27,7 +27,8 @@ export async function getTravelDetail() {
   const { data, error } = await supabase
     .from("travel")
     .select("id, travel_to, duration")
-    .eq("user_id", user.id);
+    .eq("user_id", user.id)
+    .eq("id", travelId);
 
   if (error) toast.error(error.message);
 

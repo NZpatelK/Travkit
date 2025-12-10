@@ -2,7 +2,7 @@
 
 import Checklist from "@/app/components/Checklist";
 import { useEffect, useState } from "react";
-import { clearAllData} from "@/app/utils/seedData";
+import { clearAllData } from "@/app/utils/seedData";
 import toast, { Toaster } from "react-hot-toast";
 import { allLists, resetIsCompleted } from "@/app/utils/supabase/client";
 import { motion } from "framer-motion";
@@ -46,10 +46,12 @@ export default function ChecklistPage({ params }: Props) {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      const data = await allLists();
-      if (!data || data.length === 0) setIsDataEmpty(true);
-      else setIsDataEmpty(false);
-      setIsLoading(false);
+      if (params.id) {
+        const data = await allLists();
+        if (!data || data.length === 0) setIsDataEmpty(true);
+        else setIsDataEmpty(false);
+        setIsLoading(false);
+      }
     };
     fetchData();
   }, []);
@@ -96,8 +98,7 @@ export default function ChecklistPage({ params }: Props) {
 
       {(!isDataEmpty && !isLoading) && (
         <div className="flex-grow flex flex-col items-center justify-center">
-          {/* <Checklist /> */}
-          <h1>{params.id}</h1>
+          {params.id && <Checklist travelId={params.id} />}
           <div className="mt-2 flex gap-4">
             <motion.button
               whileHover={{ scale: 1.1 }}
