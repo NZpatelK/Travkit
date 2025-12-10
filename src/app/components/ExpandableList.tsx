@@ -12,9 +12,10 @@ interface ExpandedState {
 
 interface ExpandableListProps {
     updatedProgress?: () => void;
+    travelId: string;
 }
 
-export default function ExpandableList({ updatedProgress }: ExpandableListProps) {
+export default function ExpandableList({ updatedProgress, travelId }: ExpandableListProps) {
     const [expandedItems, setExpandedItems] = useState<ExpandedState>({});
     const [categoriesWithLists, setCategoriesWithLists] = useState<any[]>([]);
     const listRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -29,7 +30,7 @@ export default function ExpandableList({ updatedProgress }: ExpandableListProps)
     }, [refreshFlag]);
 
     const fetchCategoriesWithListsData = async () => {
-        const data = await getCategoriesWithLists();
+        const data = await getCategoriesWithLists(travelId);
         setCategoriesWithLists(data);
 
         if (updatedProgress) {

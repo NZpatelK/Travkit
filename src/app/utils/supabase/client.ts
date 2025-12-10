@@ -68,10 +68,11 @@ export async function getAllTravelData() {
   return data ?? [];
 }
 
-export async function getCategoriesWithLists() {
+export async function getCategoriesWithLists(travelId: string) {
   const { data, error } = await supabase
     .from('categories')
     .select('id, title, order_by, list(id, title, is_completed, order_by)')
+    .eq('travel_id', travelId)
     .order('order_by', { ascending: true }) // Sort categories by order
     .order('order_by', { foreignTable: 'list', ascending: true }); // Sort list items by order
 

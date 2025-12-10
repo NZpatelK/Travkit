@@ -59,7 +59,7 @@ export default function Checklist({ travelId }: Props) {
                 </div>
             </div>
             <div className="flex flex-col mt-10 items-center w-full relative">
-                <ExpandableList updatedProgress={handleFetchTotalCompletedLists} />
+                <ExpandableList updatedProgress={handleFetchTotalCompletedLists} travelId={travelId} />
             </div>
         </div>
 
