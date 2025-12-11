@@ -3,7 +3,7 @@ import Image from "next/image";
 import ProgressBar from "./ProgessBar";
 import ExpandableList from "./ExpandableList";
 import { useEffect, useState } from "react";
-import { allLists, getTravelDetail } from "../utils/supabase/client";
+import { getAllListsByTravelId, getTravelDetail } from "../utils/supabase/client";
 
 interface travelProp {
     travel_to: string;
@@ -31,7 +31,7 @@ export default function Checklist({ travelId }: Props) {
     })
 
     const handleFetchTotalCompletedLists = async () => {
-        const data = await allLists();
+        const data = await getAllListsByTravelId(travelId) as any;
         const completedLists = data.filter((list: any) => list.is_completed);
         const completedListsLength = completedLists.length / data.length * 100;
         setTotalCompletedLists(completedListsLength);

@@ -101,10 +101,31 @@ export async function addListItem(title: string, categoryId: string) {
   return data;
 }
 
-export async function allLists() {
+// export async function allLists() {
+//   const { data, error } = await supabase
+//     .from('list')
+//     .select();
+
+//   if (error) toast.error(error.message);
+//   return data;
+// }
+
+export async function getAllListsByTravelId(travelId: string) {
   const { data, error } = await supabase
     .from('list')
-    .select();
+    .select(`
+      id,
+      title,
+      is_completed,
+      order_by,
+      category:categories!inner (
+        id,
+        title,
+        travel_id
+      )
+    `)
+    .eq('categories.travel_id', travelId)
+    .order('order_by');
 
   if (error) toast.error(error.message);
   return data;

@@ -4,7 +4,7 @@ import Checklist from "@/app/components/Checklist";
 import { useEffect, useState } from "react";
 import { clearAllData } from "@/app/utils/seedData";
 import toast, { Toaster } from "react-hot-toast";
-import { allLists, resetIsCompleted } from "@/app/utils/supabase/client";
+import {getAllListsByTravelId, resetIsCompleted } from "@/app/utils/supabase/client";
 import { motion } from "framer-motion";
 import { useRefresh } from "@/app/context/RefreshContext";
 import GlobePage from "@/app/components/Globe";
@@ -47,7 +47,7 @@ export default function ChecklistPage({ params }: Props) {
     const fetchData = async () => {
       setIsLoading(true);
       if (params.id) {
-        const data = await allLists();
+        const data = await getAllListsByTravelId(params.id); 
         if (!data || data.length === 0) setIsDataEmpty(true);
         else setIsDataEmpty(false);
         setIsLoading(false);
