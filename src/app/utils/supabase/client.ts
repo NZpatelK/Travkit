@@ -101,14 +101,6 @@ export async function addListItem(title: string, categoryId: string) {
   return data;
 }
 
-// export async function allLists() {
-//   const { data, error } = await supabase
-//     .from('list')
-//     .select();
-
-//   if (error) toast.error(error.message);
-//   return data;
-// }
 
 export async function getAllListsByTravelId(travelId: string) {
   const { data, error } = await supabase

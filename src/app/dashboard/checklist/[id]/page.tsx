@@ -4,23 +4,27 @@ import Checklist from "@/app/components/Checklist";
 import { useEffect, useState } from "react";
 import { clearAllData } from "@/app/utils/seedData";
 import toast, { Toaster } from "react-hot-toast";
-import {getAllListsByTravelId, resetIsCompleted } from "@/app/utils/supabase/client";
+import { getAllListsByTravelId, resetIsCompleted } from "@/app/utils/supabase/client";
 import { motion } from "framer-motion";
 import { useRefresh } from "@/app/context/RefreshContext";
 import GlobePage from "@/app/components/Globe";
 import { supabase } from "@/app/utils/supabase/client"; // <- Add Supabase client
 import { useRouter } from "next/navigation";
+import React from "react";
 
 type Props = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
 export default function ChecklistPage({ params }: Props) {
   const [isDataEmpty, setIsDataEmpty] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState<any>(null);
+
+  const { id } = React.use(params)
+
 
   const { triggerRefresh } = useRefresh();
   const router = useRouter();
@@ -45,16 +49,24 @@ export default function ChecklistPage({ params }: Props) {
   // ------------------------
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true);
-      if (params.id) {
-        const data = await getAllListsByTravelId(params.id); 
-        if (!data || data.length === 0) setIsDataEmpty(true);
-        else setIsDataEmpty(false);
-        setIsLoading(false);
+      setIsLoading(true)
+
+      if (id) {
+        const data = await getAllListsByTravelId(id)
+
+        if (!data || data.length === 0) {
+          setIsDataEmpty(true)
+        } else {
+          setIsDataEmpty(false)
+        }
       }
-    };
-    fetchData();
-  }, []);
+
+      setIsLoading(false)
+    }
+
+    fetchData()
+  }, [id])
+
 
   // ------------------------
   // Handlers
@@ -98,7 +110,7 @@ export default function ChecklistPage({ params }: Props) {
 
       {(!isDataEmpty && !isLoading) && (
         <div className="flex-grow flex flex-col items-center justify-center">
-          {params.id && <Checklist travelId={params.id} />}
+          {id && <Checklist travelId={id} />}
           <div className="mt-2 flex gap-4">
             <motion.button
               whileHover={{ scale: 1.1 }}
