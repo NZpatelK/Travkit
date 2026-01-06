@@ -7,6 +7,8 @@ import TemplateCard from "../components/TemplateCard";
 import { Category, travelData } from "../data/travelData";
 import toast, { Toaster } from "react-hot-toast";
 import { seedDataIfEmpty } from "../utils/seedData";
+import { useRouter } from "next/navigation";
+
 
 interface CountryOption {
     value: string;
@@ -18,8 +20,9 @@ export default function CreateTravelChecklist(): JSX.Element {
     const [AddOnListData, setAddOnListData] = useState<Category[]>([]);
     const [inputDuration, setInputDuration] = useState<number | "">("");
     const [selectedCountry, setSelectedCountry] = useState<CountryOption | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
+    // const [isLoading, setIsLoading] = useState(false);
 
+    const router = useRouter();
 
     const handleAddList = (category: Category) => {
         setAddOnListData([...AddOnListData, category]);
@@ -34,14 +37,17 @@ export default function CreateTravelChecklist(): JSX.Element {
         if (!selectedCountry) return toast.error("Please select a country");
         if (!inputDuration || inputDuration <= 1) return toast.error("Please enter a valid duration. Must be greater than 1.");
 
-        setIsLoading(true);
-        await seedDataIfEmpty(AddOnListData, selectedCountry?.label ?? "", inputDuration as number);
+        // setIsLoading(true);
+        const travelId = await seedDataIfEmpty(AddOnListData, selectedCountry?.label ?? "", inputDuration as number);
         toast.success("List created!");
         setAddOnListData([]);
         setInputDuration("");
         setSelectedCountry(null);
+        router.push(`/dashboard/checklist/${travelId}`);
         // setIsDataEmpty(false);
-        setIsLoading(false);
+        // setIsLoading(false);
+
+
     };
 
     return (

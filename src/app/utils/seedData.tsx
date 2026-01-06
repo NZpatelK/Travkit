@@ -31,7 +31,7 @@ export async function seedDataIfEmpty(categories: Category[], travelTo: string, 
       .select()
       .single();
 
-    alert(userId);
+    // alert(userId);
 
     if (travelError || !travelData) throw new Error(`Travel insert error: ${JSON.stringify(travelError)}`);
 
