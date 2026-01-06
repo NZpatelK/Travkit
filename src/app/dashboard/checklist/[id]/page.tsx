@@ -72,9 +72,10 @@ export default function ChecklistPage({ params }: Props) {
   // Handlers
   // ------------------------
   const handleClearList = async () => {
-    await clearAllData();
+    await clearAllData(id!);
     toast.success("List cleared!");
     setIsDataEmpty(true);
+    router.replace(`/dashboard`);
   };
 
   const handleClearCompleted = async () => {

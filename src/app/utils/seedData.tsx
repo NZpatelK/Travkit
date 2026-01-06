@@ -84,27 +84,61 @@ export async function seedDataIfEmpty(categories: Category[], travelTo: string, 
   }
 }
 
-export async function clearAllData() {
-  const hasData = async (table: string) => {
-    const { data, error } = await supabase.from(table).select('id').limit(1);
+// export async function clearAllData(TravelId: string) {
+//   const hasData = async (table: string) => {
+//     const { data, error } = await supabase.from(table).select('id').limit(1);
+//     if (error) throw new Error(`Error checking ${table}: ${JSON.stringify(error)}`);
+//     return data && data.length > 0;
+//   };
+
+//   const deleteAll = async (table: string) => {
+//     const { error } = await supabase.from(table).delete().not('id', 'is', null);
+//     if (error) throw new Error(`Error clearing ${table}: ${JSON.stringify(error)}`);
+
+//     const stillHasData = await hasData(table);
+//     if (stillHasData) {
+//       throw new Error(`Data still present in ${table} after delete`);
+//     }
+//   };
+
+//   // Delete in order to handle dependencies
+//   if (await hasData('list')) await deleteAll('list');
+//   if (await hasData('categories')) await deleteAll('categories');
+//   if (await hasData('travel')) await deleteAll('travel');
+
+//   return { cleared: true };
+// }
+
+export async function clearAllData(travelId: string) {
+  // Check if a table has data for this travelId
+  const hasData = async (table: string, column: string) => {
+    const { data, error } = await supabase
+      .from(table)
+      .select('id')
+      .eq(column, travelId)
+      .limit(1);
     if (error) throw new Error(`Error checking ${table}: ${JSON.stringify(error)}`);
     return data && data.length > 0;
   };
 
-  const deleteAll = async (table: string) => {
-    const { error } = await supabase.from(table).delete().not('id', 'is', null);
+  // Delete all rows in a table for a specific travelId
+  const deleteAll = async (table: string, column: string) => {
+    const { error } = await supabase
+      .from(table)
+      .delete()
+      .eq(column, travelId); // <-- only rows that match travelId
     if (error) throw new Error(`Error clearing ${table}: ${JSON.stringify(error)}`);
 
-    const stillHasData = await hasData(table);
+    const stillHasData = await hasData(table, column);
     if (stillHasData) {
       throw new Error(`Data still present in ${table} after delete`);
     }
   };
 
   // Delete in order to handle dependencies
-  if (await hasData('list')) await deleteAll('list');
-  if (await hasData('categories')) await deleteAll('categories');
-  if (await hasData('travel')) await deleteAll('travel');
+  if (await hasData('categories', 'travel_id')) await deleteAll('categories', 'travel_id');
+  if (await hasData('travel', 'id')) await deleteAll('travel', 'id');
 
   return { cleared: true };
 }
+
