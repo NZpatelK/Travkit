@@ -16,11 +16,10 @@ interface CountryOption {
 }
 
 export default function CreateTravelChecklist(): JSX.Element {
-    // const [isDataEmpty, setIsDataEmpty] = useState(true);
+
     const [AddOnListData, setAddOnListData] = useState<Category[]>([]);
     const [inputDuration, setInputDuration] = useState<number | "">("");
     const [selectedCountry, setSelectedCountry] = useState<CountryOption | null>(null);
-    // const [isLoading, setIsLoading] = useState(false);
 
     const router = useRouter();
 
@@ -37,23 +36,23 @@ export default function CreateTravelChecklist(): JSX.Element {
         if (!selectedCountry) return toast.error("Please select a country");
         if (!inputDuration || inputDuration <= 1) return toast.error("Please enter a valid duration. Must be greater than 1.");
 
-        // setIsLoading(true);
         const travelId = await seedDataIfEmpty(AddOnListData, selectedCountry?.label ?? "", inputDuration as number);
         toast.success("List created!");
         setAddOnListData([]);
         setInputDuration("");
         setSelectedCountry(null);
         router.push(`/dashboard/checklist/${travelId}`);
-        // setIsDataEmpty(false);
-        // setIsLoading(false);
-
-
     };
+
+    const closeModal = () => {
+        router.push('/dashboard');
+    }
 
     return (
         <div>
             <Toaster position="top-right" reverseOrder={true} />
             <AddOnList isOpen={true}>
+                <button className="absolute top-2 right-4 text-violet-700 hover:text-violet-900 text-2xl z-30" onClick={closeModal}>x</button>
                 <h1 className="text-3xl font-bold text-neutral-800 text-center">Welcome to TravKit</h1>
                 <hr className="my-2 w-5/12 mx-auto text-neutral-300" />
                 <h2 className="text-sm font-semibold text-neutral-800 text-center">Create a checklist for your next trip</h2>

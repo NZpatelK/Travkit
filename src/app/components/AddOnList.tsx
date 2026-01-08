@@ -30,7 +30,7 @@ export default function AddOnList({ isOpen, children }: SlideUpModalProps) {
             transition={{ duration: 0.3 }}
           >
             <motion.div
-              className="bg-white rounded-2xl modal-scroll w-full max-w-lg max-h-[90vh] overflow-auto p-6"
+              className="bg-white rounded-2xl modal-scroll w-full max-w-lg max-h-[90vh] overflow-auto p-6 relative" 
               initial={{ y: 50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 50, opacity: 0 }}
