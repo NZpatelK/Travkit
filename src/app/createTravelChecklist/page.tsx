@@ -44,16 +44,11 @@ export default function CreateTravelChecklist(): JSX.Element {
         router.push(`/dashboard/checklist/${travelId}`);
     };
 
-    const closeModal = () => {
-        router.push('/dashboard');
-    }
-
     return (
         <div>
             <Toaster position="top-right" reverseOrder={true} />
-            <AddOnList isOpen={true}>
-                <button className="absolute top-2 right-4 text-violet-700 hover:text-violet-900 text-2xl z-30" onClick={closeModal}>x</button>
-                <h1 className="text-3xl font-bold text-neutral-800 text-center">Welcome to TravKit</h1>
+            <AddOnList>
+                <h1 className="text-3xl font-bold text-neutral-800 text-center mt-5">Welcome to TravKit</h1>
                 <hr className="my-2 w-5/12 mx-auto text-neutral-300" />
                 <h2 className="text-sm font-semibold text-neutral-800 text-center">Create a checklist for your next trip</h2>
 
