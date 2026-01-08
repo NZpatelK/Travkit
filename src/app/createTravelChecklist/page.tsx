@@ -6,7 +6,7 @@ import SearchableCountrySelect from "../components/SearchableCountrySelect";
 import TemplateCard from "../components/TemplateCard";
 import { Category, travelData } from "../data/travelData";
 import toast, { Toaster } from "react-hot-toast";
-import { seedDataIfEmpty } from "../utils/seedData";
+import { createNewTravelChecklist } from "../utils/seedData";
 import { useRouter } from "next/navigation";
 
 
@@ -36,7 +36,7 @@ export default function CreateTravelChecklist(): JSX.Element {
         if (!selectedCountry) return toast.error("Please select a country");
         if (!inputDuration || inputDuration <= 1) return toast.error("Please enter a valid duration. Must be greater than 1.");
 
-        const travelId = await seedDataIfEmpty(AddOnListData, selectedCountry?.label ?? "", inputDuration as number);
+        const travelId = await createNewTravelChecklist(AddOnListData, selectedCountry?.label ?? "", inputDuration as number);
         toast.success("List created!");
         setAddOnListData([]);
         setInputDuration("");

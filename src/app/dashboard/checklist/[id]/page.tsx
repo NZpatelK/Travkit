@@ -2,7 +2,7 @@
 
 import Checklist from "@/app/components/Checklist";
 import { useEffect, useState } from "react";
-import { clearAllData } from "@/app/utils/seedData";
+import { deteleTravelChecklistByTravelId } from "@/app/utils/seedData";
 import toast, { Toaster } from "react-hot-toast";
 import { getAllListsByTravelId, resetIsCompleted } from "@/app/utils/supabase/client";
 import { motion } from "framer-motion";
@@ -72,7 +72,7 @@ export default function ChecklistPage({ params }: Props) {
   // Handlers
   // ------------------------
   const handleClearList = async () => {
-    await clearAllData(id!);
+    await deteleTravelChecklistByTravelId(id!);
     toast.success("List cleared!");
     setIsDataEmpty(true);
     router.replace(`/dashboard`);

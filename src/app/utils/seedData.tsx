@@ -1,7 +1,7 @@
 import { supabase } from '@/app/utils/supabase/client';
 import { Category } from '../data/travelData';
 
-export async function seedDataIfEmpty(categories: Category[], travelTo: string, duration: number) {
+export async function createNewTravelChecklist(categories: Category[], travelTo: string, duration: number) {
   try {
     // Check if tables are empty
     const { error: catCountError } = await supabase
@@ -84,32 +84,7 @@ export async function seedDataIfEmpty(categories: Category[], travelTo: string, 
   }
 }
 
-// export async function clearAllData(TravelId: string) {
-//   const hasData = async (table: string) => {
-//     const { data, error } = await supabase.from(table).select('id').limit(1);
-//     if (error) throw new Error(`Error checking ${table}: ${JSON.stringify(error)}`);
-//     return data && data.length > 0;
-//   };
-
-//   const deleteAll = async (table: string) => {
-//     const { error } = await supabase.from(table).delete().not('id', 'is', null);
-//     if (error) throw new Error(`Error clearing ${table}: ${JSON.stringify(error)}`);
-
-//     const stillHasData = await hasData(table);
-//     if (stillHasData) {
-//       throw new Error(`Data still present in ${table} after delete`);
-//     }
-//   };
-
-//   // Delete in order to handle dependencies
-//   if (await hasData('list')) await deleteAll('list');
-//   if (await hasData('categories')) await deleteAll('categories');
-//   if (await hasData('travel')) await deleteAll('travel');
-
-//   return { cleared: true };
-// }
-
-export async function clearAllData(travelId: string) {
+export async function deteleTravelChecklistByTravelId(travelId: string) {
   // Check if a table has data for this travelId
   const hasData = async (table: string, column: string) => {
     const { data, error } = await supabase
