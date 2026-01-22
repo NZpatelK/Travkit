@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import List from './List';
-import { getCategoriesWithLists } from '../utils/supabase/client';
+import { addNewItemToList, getCategoriesWithLists } from '../utils/supabase/client';
 import { useRefresh } from '../context/RefreshContext';
 
 interface ExpandedState {
@@ -105,6 +105,17 @@ export default function ExpandableList({ updatedProgress, travelId }: Expandable
         return totalCompleted;
     }
 
+    const handleAddNewItem = async (category_id: string) => {
+        addNewItemToList({ title: inputNewItem, category_id })
+        .then(() => {
+            fetchCategoriesWithListsData();
+        })
+        .catch((error) => {
+            console.error('Error adding new item:', error);
+        });
+        setInputNewItem('');
+    }
+
     return (
         <div className="w-11/12 mx-auto my-4">
             {categoriesWithLists?.map((category, index) => (
@@ -144,7 +155,7 @@ export default function ExpandableList({ updatedProgress, travelId }: Expandable
                                     placeholder="Add a New Item"
                                     className="flex-1 bg-transparent py-2 pl-8 text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
                                 />
-                                <button className="shrink-0 pr-4 text-violet-600 text-md font-normal tracking-wide" onClick={()=> alert(category.id)}>
+                                <button className="shrink-0 pr-4 text-violet-600 text-md font-normal tracking-wide" onClick={() => handleAddNewItem(category.id)}>
                                     Add Item
                                 </button>
                             </div>
