@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import List from './List';
 import { addNewItemToList, getCategoriesWithLists } from '../utils/supabase/client';
 import { useRefresh } from '../context/RefreshContext';
+import toast from 'react-hot-toast';
 
 interface ExpandedState {
     [key: number]: boolean;
@@ -111,7 +112,7 @@ export default function ExpandableList({ updatedProgress, travelId }: Expandable
             fetchCategoriesWithListsData();
         })
         .catch((error) => {
-            console.error('Error adding new item:', error);
+            toast.error('Error adding new item:', error);
         });
         setInputNewItem('');
     }
