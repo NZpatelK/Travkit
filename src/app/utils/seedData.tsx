@@ -31,8 +31,6 @@ export async function createNewTravelChecklist(categories: Category[], travelTo:
       .select()
       .single();
 
-    // alert(userId);
-
     if (travelError || !travelData) throw new Error(`Travel insert error: ${JSON.stringify(travelError)}`);
 
     const travelId = travelData.id;
@@ -43,8 +41,6 @@ export async function createNewTravelChecklist(categories: Category[], travelTo:
       order_by: c.orderBy,
       travel_id: travelId,
     }));
-
-    console.log('Seeding categories:', categoryInsertPayload);
 
     // Insert categories
     const { data: insertedCategories, error: catError } = await supabase
@@ -69,8 +65,6 @@ export async function createNewTravelChecklist(categories: Category[], travelTo:
         order_by: item.orderBy,
       }))
     );
-
-    console.log('Seeding list items:', listInsertPayload);
 
     // Insert list items
     const { error: listError } = await supabase.from('list').insert(listInsertPayload);
