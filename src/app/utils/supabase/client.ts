@@ -144,3 +144,50 @@ export async function updateIsCompleted(id: string | number, is_completed: boole
   if (error) toast.error(error.message);
   return data;
 }
+
+type AddListItemInput = {
+  title: string
+  category_id: string
+}
+
+
+export async function addNewItemToList({
+  title,
+  category_id,
+}: AddListItemInput) {
+
+  // 1️⃣ Get last order_by for this category
+  const { data: lastItem, error: fetchError } = await supabase
+    .from('list')
+    .select('order_by')
+    .eq('category_id', category_id)
+    .order('order_by', { ascending: false })
+    .limit(1)
+    .single()
+
+  if (fetchError && fetchError.code !== 'PGRST116') {
+    toast.error(fetchError.message)
+  }
+
+  const nextOrder =
+    lastItem?.order_by !== null && lastItem?.order_by !== undefined
+      ? lastItem.order_by + 1
+      : 1
+
+  // 2️⃣ Insert new item
+  const { data, error: insertError } = await supabase
+    .from('list')
+    .insert({
+      title,
+      category_id,
+      order_by: nextOrder,
+    })
+    .select()
+    .single()
+
+  if (insertError) {
+    toast.error(insertError.message)
+  }
+
+  return data
+}

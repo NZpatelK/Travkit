@@ -16,6 +16,7 @@ interface ExpandableListProps {
 }
 
 export default function ExpandableList({ updatedProgress, travelId }: ExpandableListProps) {
+    const [inputNewItem, setInputNewItem] = useState('');
     const [expandedItems, setExpandedItems] = useState<ExpandedState>({});
     const [categoriesWithLists, setCategoriesWithLists] = useState<any[]>([]);
     const listRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -138,7 +139,9 @@ export default function ExpandableList({ updatedProgress, travelId }: Expandable
                             <div className="mx-auto my-4 mb-2 w-full overflow-hidden rounded border-2 border-neutral-200 flex items-center gap-2 px-2 focus-within:border-violet-600">
                                 <input
                                     type="text"
-                                    placeholder="Add a new item"
+                                    value={inputNewItem}
+                                    onChange={(e) => setInputNewItem(e.target.value)}
+                                    placeholder="Add a New Item"
                                     className="flex-1 bg-transparent py-2 pl-8 text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
                                 />
                                 <button className="shrink-0 pr-4 text-violet-600 text-md font-normal tracking-wide" onClick={()=> alert(category.id)}>
