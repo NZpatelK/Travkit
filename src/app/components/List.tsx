@@ -6,11 +6,12 @@ interface ListProps {
     id: number | string;
     title: string;
     is_completed: boolean;
+    is_deletable?: boolean;
     updateData: () => void;
 
 }
 
-export default function List({ id, title, is_completed, updateData}: ListProps) {
+export default function List({ id, title, is_completed, is_deletable, updateData}: ListProps) {
     const [isChecked, setIsChecked] = useState(is_completed);
 
     useEffect(() => {
@@ -32,6 +33,7 @@ export default function List({ id, title, is_completed, updateData}: ListProps) 
             >
                 {title}
             </span>
+            {is_deletable && <button className="ml-auto text-red-700 hover:text-red-400">Delete Item</button>}
         </div>
     );
 }
