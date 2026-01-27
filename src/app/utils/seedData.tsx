@@ -61,6 +61,7 @@ export async function createNewTravelChecklist(categories: Category[], travelTo:
       category.list.map((item) => ({
         title: item.title,
         is_completed: item.is_completed ?? false,
+        is_deletable: item.is_deletable ?? false,
         category_id: categoryMap[category.title],
         order_by: item.orderBy,
       }))

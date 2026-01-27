@@ -180,6 +180,7 @@ export async function addNewItemToList({
     .insert({
       title,
       category_id,
+      is_deletable: true,
       order_by: nextOrder,
     })
     .select()
