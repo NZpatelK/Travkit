@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Checkbox from "./Checkbox";
 import { updateIsCompleted } from "../utils/supabase/client";
+import { Trash2Icon } from 'lucide-react';
 
 interface ListProps {
     id: number | string;
@@ -33,7 +34,7 @@ export default function List({ id, title, is_completed, is_deletable, updateData
             >
                 {title}
             </span>
-            {is_deletable && <button className="ml-auto text-red-700 hover:text-red-400">Delete Item</button>}
+            {is_deletable && <Trash2Icon className="ml-auto text-red-500 hover:text-red-600" />}
         </div>
     );
 }

@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import List from './List';
 import { addNewItemToList, getCategoriesWithLists } from '../utils/supabase/client';
 import { useRefresh } from '../context/RefreshContext';
+import { PlusCircleIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface ExpandedState {
@@ -107,6 +108,10 @@ export default function ExpandableList({ updatedProgress, travelId }: Expandable
     }
 
     const handleAddNewItem = async (category_id: string) => {
+        if (inputNewItem.trim() === '') {
+            toast.error('Item title cannot be empty');
+            return;
+        }
         addNewItemToList({ title: inputNewItem, category_id })
         .then(() => {
             fetchCategoriesWithListsData();
@@ -156,9 +161,8 @@ export default function ExpandableList({ updatedProgress, travelId }: Expandable
                                     placeholder="Add a New Item"
                                     className="flex-1 bg-transparent py-2 pl-8 text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
                                 />
-                                <button className="shrink-0 pr-4 text-violet-600 text-md font-normal tracking-wide" onClick={() => handleAddNewItem(category.id)}>
-                                    Add Item
-                                </button>
+                                <PlusCircleIcon className="text-violet-600 hover:text-violet-800 text-md font-normal tracking-wide w-8" onClick={() => handleAddNewItem(category.id)}/>
+                        
                             </div>
 
                         </div>
@@ -168,3 +172,4 @@ export default function ExpandableList({ updatedProgress, travelId }: Expandable
         </div>
     );
 }
+
