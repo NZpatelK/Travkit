@@ -192,3 +192,15 @@ export async function addNewItemToList({
 
   return data
 }
+
+export async function deleteListItem(id: string) {
+  const { error } = await supabase
+    .from("list")
+    .delete()
+    .eq("id", id)
+    .eq("is_deletable", true); // extra safety
+
+  if (error) {
+    throw new Error(error.message);
+  }
+}
