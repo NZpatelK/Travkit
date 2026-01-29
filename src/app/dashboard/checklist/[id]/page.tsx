@@ -109,6 +109,13 @@ export default function ChecklistPage({ params }: Props) {
         </button>
       </div>
 
+      <button
+        onClick={() => router.replace('/dashboard')}
+        className="mx-10 mt-4 px-8 py-3 rounded shadow-md z-9999 bg-violet-700 hover:bg-violet-800 cursor-pointer transition-colors duration-200 self-start"
+      >
+        &larr; Back to Dashboard
+      </button>
+
       {(!isDataEmpty && !isLoading) && (
         <div className="flex-grow flex flex-col items-center justify-center">
           {id && <Checklist travelId={id} />}
