@@ -25,12 +25,12 @@ export default function LoginPage() {
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-[#0B0F1A] via-[#0E1325] to-[#0B0F1A] px-4">
       {/* Ambient glow */}
-      <div className="absolute -top-40 -left-40 h-[28rem] w-[28rem] rounded-full bg-sky-500/10 blur-3xl" />
-      <div className="absolute -bottom-40 -right-40 h-[28rem] w-[28rem] rounded-full bg-indigo-500/10 blur-3xl" />
+      <div className="absolute -top-40 -left-40 h-[28rem] w-[28rem] rounded-full bg-violet-500/10 blur-3xl" />
+      <div className="absolute -bottom-40 -right-40 h-[28rem] w-[28rem] rounded-full bg-violet-500/10 blur-3xl" />
 
       <div className="relative z-10 w-full max-w-sm rounded-2xl bg-white/5 p-8 shadow-xl ring-1 ring-white/10 backdrop-blur">
         <h1 className="text-center text-3xl font-semibold tracking-tight text-white">
-          Welcome to <span className="text-sky-400">TravKit</span>
+          Welcome to <span className="text-violet-400">TravKit</span>
         </h1>
 
         <p className="mt-2 text-center text-sm text-gray-400">
@@ -45,14 +45,14 @@ export default function LoginPage() {
             required
             onChange={(e) => setEmail(e.target.value)}
             className="w-full border-b border-white/15 bg-transparent py-2 text-sm text-white
-                       placeholder:text-gray-500 focus:border-sky-400 focus:outline-none transition"
+                       placeholder:text-gray-500 focus:border-violet-400 focus:outline-none transition"
           />
 
           <button
             type="submit"
-            className="w-full rounded-xl bg-sky-600 py-2.5 text-sm font-semibold text-white
-                       shadow-lg shadow-sky-600/30 transition hover:bg-sky-500
-                       focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2
+            className="w-full rounded-xl bg-violet-600 py-2.5 text-sm font-semibold text-white
+                       shadow-lg shadow-violet-600/30 transition hover:bg-violet-500
+                       focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2
                        focus:ring-offset-[#0B0F1A]"
           >
             Continue

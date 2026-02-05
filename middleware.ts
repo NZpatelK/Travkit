@@ -2,33 +2,37 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-export async function middleware(req: NextRequest) {
-  // Initialize a Supabase client using service URL + anon key
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+// Create Supabase client once (better performance)
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
-  // Get the user's session token from cookies
+export async function middleware(req: NextRequest) {
   const token = req.cookies.get("sb-access-token")?.value;
 
-  // If no token, redirect to /login
+  // If no token, redirect to landing page
   if (!token) {
-    return NextResponse.redirect(new URL("/login", req.url));
+    return NextResponse.redirect(new URL("/", req.url));
   }
 
-  // Optionally, validate the token
-  const { data, error } = await supabase.auth.getUser(token);
+  // Validate token
+  const { data: userData, error } = await supabase.auth.getUser(token);
 
-  if (error || !data.user) {
-    return NextResponse.redirect(new URL("/login", req.url));
+  // If token invalid or expired, redirect to landing page and clear cookies
+  if (error || !userData.user) {
+    const response = NextResponse.redirect(new URL("/", req.url));
+    response.cookies.delete("sb-access-token");
+    response.cookies.delete("sb-refresh-token");
+    response.cookies.delete("sb-auth-token"); // Supabase sometimes sets this
+    return response;
   }
 
-  // Allow access if authenticated
+  // User is authenticated -> allow access
   return NextResponse.next();
 }
 
-// Protect only certain routes
+// Protect only dashboard routes
 export const config = {
-  matcher: ["/dashboard/:path*"], // Add more paths as needed
+  matcher: ["/dashboard", "/dashboard/:path*"],
 };
