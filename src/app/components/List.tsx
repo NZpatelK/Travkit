@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Checkbox from "./Checkbox";
-import { deleteListItem, updateIsCompleted } from "../utils/supabase/client";
 import { Trash2Icon } from 'lucide-react';
+import { deleteListItem, updateIsCompleted } from "../utils/supabase/list";
 
 interface ListProps {
     id: number | string;

@@ -3,10 +3,11 @@
 import { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import List from './List';
-import { addNewItemToList, getCategoriesWithLists } from '../utils/supabase/client';
 import { useRefresh } from '../context/RefreshContext';
 import { PlusCircleIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { getCategoriesWithLists } from '../utils/supabase/categories';
+import { addNewItemToList } from '../utils/supabase/list';
 
 interface ExpandedState {
     [key: number]: boolean;

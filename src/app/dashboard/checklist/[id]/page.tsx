@@ -4,13 +4,15 @@ import Checklist from "@/app/components/Checklist";
 import { useEffect, useState } from "react";
 import { deteleTravelChecklistByTravelId } from "@/app/utils/seedData";
 import toast, { Toaster } from "react-hot-toast";
-import { getAllListsByTravelId, resetIsCompleted } from "@/app/utils/supabase/client";
+// import { getAllListsByTravelId } from "@/app/utils/supabase/client";
 import { motion } from "framer-motion";
 import { useRefresh } from "@/app/context/RefreshContext";
 import GlobePage from "@/app/components/Globe";
-import { supabase } from "@/app/utils/supabase/client"; // <- Add Supabase client
+import { supabase } from "@/app/utils/supabase/client"; 
 import { useRouter } from "next/navigation";
 import React from "react";
+import { getCurrentUser } from "@/app/utils/supabase/auth";
+import { getAllListsByTravelId, resetIsCompleted } from "@/app/utils/supabase/list";
 
 type Props = {
   params: Promise<{
@@ -34,11 +36,11 @@ export default function ChecklistPage({ params }: Props) {
   // ------------------------
   useEffect(() => {
     const checkAuth = async () => {
-      const { data } = await supabase.auth.getUser();
-      if (!data.user) {
+      const data = await getCurrentUser(); 
+      if (!data) {
         router.replace("/login"); // redirect if not logged in
       } else {
-        setUser(data.user);
+        setUser(data);
       }
     };
     checkAuth();

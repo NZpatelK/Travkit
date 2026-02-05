@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { supabase } from "./utils/supabase/client";
+import { getCurrentUser } from "./utils/supabase/auth";
 
 export default function Home() {
   const router = useRouter();
@@ -13,8 +13,8 @@ export default function Home() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const { data } = await supabase.auth.getUser();
-      if (data.user) {
+      const data  = await getCurrentUser();
+      if (data) {
         router.replace("/dashboard");
       }
     };

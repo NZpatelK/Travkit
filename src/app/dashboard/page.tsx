@@ -1,9 +1,9 @@
 "use client";
 
 import React, { JSX, useEffect, useState } from "react";
-import { getAllTravelData } from "../utils/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { getAllTravelData } from "../utils/supabase/travel";
 
 interface TravelProps {
   travel_to: string;

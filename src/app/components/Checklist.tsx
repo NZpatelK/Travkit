@@ -3,7 +3,8 @@ import Image from "next/image";
 import ProgressBar from "./ProgessBar";
 import ExpandableList from "./ExpandableList";
 import { useEffect, useState } from "react";
-import { getAllListsByTravelId, getTravelDetail } from "../utils/supabase/client";
+import { getTravelDetail } from "../utils/supabase/travel";
+import { getAllListsByTravelId } from "../utils/supabase/list";
 
 interface travelProp {
     travel_to: string;

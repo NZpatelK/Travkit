@@ -6,8 +6,8 @@ import SearchableCountrySelect from "../components/SearchableCountrySelect";
 import TemplateCard from "../components/TemplateCard";
 import { Category, travelData } from "../data/travelData";
 import toast, { Toaster } from "react-hot-toast";
-import { createNewTravelChecklist } from "../utils/seedData";
 import { useRouter } from "next/navigation";
+import { createNewTravelChecklist } from "../utils/supabase/checklist";
 
 
 interface CountryOption {
