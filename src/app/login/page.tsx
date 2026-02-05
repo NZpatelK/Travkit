@@ -9,39 +9,52 @@ export default function LoginPage() {
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
-    setMessage("Sending magic link...");
+    setMessage("Sending link…");
 
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`
-      }
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
     });
 
     if (error) setMessage(error.message);
-    else setMessage("Check your email for the magic link!");
+    else setMessage("Check your email ✉️");
   }
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen">
-      <h1 className="text-2xl font-semibold mb-4">Login with Email</h1>
-      <form onSubmit={handleLogin} className="flex flex-col gap-3 w-72">
-        <input
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          required
-          onChange={(e) => setEmail(e.target.value)}
-          className="border p-2 rounded"
-        />
-        <button
-          type="submit"
-          className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
-        >
-          Send Magic Link
-        </button>
-      </form>
-      <p className="mt-4 text-sm text-gray-600">{message}</p>
+    <main className="min-h-screen flex items-center justify-center bg-neutral-950 px-4">
+      <div className="w-full max-w-sm rounded-2xl bg-neutral-900 p-8 shadow-xl">
+        <h1 className="text-3xl font-medium text-white text-center">
+          Welcome TravKit
+        </h1>
+
+        <form onSubmit={handleLogin} className="mt-8 space-y-5">
+          <input
+            type="email"
+            placeholder="Email address"
+            value={email}
+            required
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full bg-transparent border-b border-neutral-700 py-2 text-sm text-white
+                       placeholder:text-neutral-500 focus:outline-none focus:border-white transition"
+          />
+
+          <button
+            type="submit"
+            className="w-full rounded-lg bg-white py-2.5 text-sm font-medium text-neutral-900
+                       hover:bg-neutral-200 transition"
+          >
+            Continue
+          </button>
+        </form>
+
+        {message && (
+          <p className="mt-6 text-center text-xs text-neutral-400">
+            {message}
+          </p>
+        )}
+      </div>
     </main>
   );
 }

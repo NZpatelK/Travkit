@@ -8,29 +8,54 @@ export default function Home() {
   const router = useRouter();
 
   const handleLogin = () => {
-    router.push("/login"); // client-side navigation
+    router.push("/login");
   };
 
   useEffect(() => {
     const checkAuth = async () => {
       const { data } = await supabase.auth.getUser();
       if (data.user) {
-        router.replace("/dashboard"); // redirect if logged in
+        router.replace("/dashboard");
       }
     };
     checkAuth();
   }, [router]);
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen">
-      <h1 className="text-3xl font-bold">Welcome to TravKit</h1>
-      <p className="mt-4 text-lg">Your travel planning companion.</p>
-      <button
-        className="mt-6 bg-blue-600 text-white font-semibold px-4 py-2 rounded z-9999 cursor-pointer hover:bg-blue-700 transition-colors duration-200" 
-        onClick={handleLogin}
-      >
-        Login
-      </button>
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-[#0B0F1A] via-[#0E1325] to-[#0B0F1A]">
+      {/* Ambient glow */}
+      <div className="absolute -top-40 -left-40 h-[32rem] w-[32rem] rounded-full bg-sky-500/10 blur-3xl" />
+      <div className="absolute -bottom-40 -right-40 h-[32rem] w-[32rem] rounded-full bg-indigo-500/10 blur-3xl" />
+
+      <section className="relative z-10 mx-auto max-w-3xl px-6 text-center">
+        <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-4 py-1 text-sm font-medium text-sky-300 ring-1 ring-white/10 backdrop-blur">
+          ✈️ Travel checklist made simple
+        </span>
+
+        <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
+          Pack smarter. <br className="hidden sm:block" />
+          Travel with confidence.
+        </h1>
+
+        <p className="mt-6 text-lg leading-relaxed text-gray-400">
+          <span className="font-semibold text-gray-200">TravKit</span> keeps all
+          your travel checklists in one place — so you never forget essentials,
+          documents, or last-minute items again.
+        </p>
+
+        <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <button
+            onClick={handleLogin}
+            className="rounded-xl bg-sky-600 px-8 py-3 text-base font-semibold text-white shadow-lg shadow-sky-600/30 transition hover:bg-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2 focus:ring-offset-[#0B0F1A]"
+          >
+            Get started
+          </button>
+
+          <span className="text-sm text-gray-500">
+            Sign in to access your travel dashboard
+          </span>
+        </div>
+      </section>
     </main>
   );
 }
