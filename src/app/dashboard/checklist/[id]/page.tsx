@@ -10,7 +10,10 @@ import { supabase } from "@/app/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { getCurrentUser } from "@/app/utils/supabase/auth";
-import { getAllListsByTravelId, resetIsCompleted } from "@/app/utils/supabase/list";
+import {
+  getAllListsByTravelId,
+  resetIsCompleted,
+} from "@/app/utils/supabase/list";
 import { deleteTravelChecklistByTravelId } from "@/app/utils/supabase/checklist";
 
 type Props = {
@@ -59,8 +62,7 @@ export default function ChecklistPage({ params }: Props) {
   const handleClearList = async () => {
     await deleteTravelChecklistByTravelId(id!);
     toast.success("List cleared!");
-    setIsDataEmpty(true);
-    router.replace(`/dashboard`);
+    router.replace("/dashboard");
   };
 
   const handleClearCompleted = async () => {
@@ -77,129 +79,92 @@ export default function ChecklistPage({ params }: Props) {
   if (!user) return <GlobePage />;
 
   return (
-    <div className="relative flex min-h-screen flex-col overflow-hidden bg-gradient-to-br from-[#0B0F1A] via-[#0E1325] to-[#0B0F1A] text-white px-6 py-8">
+    <main className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0B0F1A] via-[#0E1325] to-[#0B0F1A] px-6 overflow-x-hidden">
       <Toaster position="top-right" reverseOrder />
 
       {/* Ambient glow */}
-      <div className="absolute -top-40 -left-40 h-[32rem] w-[32rem] rounded-full bg-violet-500/10 blur-3xl" />
-      <div className="absolute -bottom-40 -right-40 h-[32rem] w-[32rem] rounded-full bg-violet-500/10 blur-3xl" />
+      <div className="absolute -top-40 -left-40 h-[28rem] w-[28rem] rounded-full bg-violet-500/10 blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-40 -right-40 h-[28rem] w-[28rem] rounded-full bg-violet-500/10 blur-3xl pointer-events-none" />
 
-      {/* Header */}
-      <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between mb-8">
-        <h1 className="text-4xl font-extrabold tracking-wide text-violet-400">
-          TRAVKIT
-        </h1>
+      {/* Centered Content */}
+      <div className="relative z-10 w-full max-w-3xl">
+        {/* Header */}
+        <header className="mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <h1 className="text-4xl font-extrabold tracking-wide text-violet-400">
+            TRAVKIT
+          </h1>
 
-        <div className="flex gap-4 mt-4 sm:mt-0">
-          {/* Secondary / Navigation */}
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="
-    rounded-xl border border-white/15
-    bg-white/5 px-5 py-2.5
-    text-sm text-gray-300
-    transition
-    hover:bg-white/10 hover:text-white
-  "
-            onClick={() => router.replace('/dashboard')}
-          >
-            ← Dashboard
-          </motion.button>
-
-
-          {/* Destructive / Logout */}
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="
-    rounded-xl border border-red-500/30
-    bg-transparent px-5 py-2.5
-    text-sm text-red-400
-    transition
-    hover:bg-red-500/10 hover:text-red-300
-  "
-            onClick={handleLogout}
-          >
-            Logout
-          </motion.button>
-        </div>
-      </div>
-
-      {/* Content */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="relative z-10 flex flex-1 flex-col items-center justify-center gap-6"
-      >
-        {isLoading && <GlobePage />}
-
-        {!isDataEmpty && !isLoading ? (
-          <div className="w-full max-w-3xl flex flex-col gap-6">
-            {id && <Checklist travelId={id} />}
-
-            {/* Action Buttons */}
-            <div className="flex flex-wrap justify-center gap-4">
-              {/* Destructive – Delete All */}
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="
-    rounded-xl border border-red-500/30
-    bg-transparent px-6 py-2.5
-    text-sm text-red-400
-    transition
-    hover:bg-red-500/10 hover:text-red-300
-  "
-                onClick={handleClearList}
-              >
-                🗑️ Delete all tasks
-              </motion.button>
-
-
-              {/* Primary – Clear Completed */}
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="
-    rounded-xl border border-violet-500/40
-    bg-violet-600/10 px-6 py-2.5
-    text-sm text-violet-300
-    transition
-    hover:bg-violet-600/20 hover:text-violet-200
-  "
-                onClick={handleClearCompleted}
-              >
-                ✅ Clear completed
-              </motion.button>
-
-            </div>
-          </div>
-        ) : !isLoading ? (
-          <div className="mt-20 flex flex-col items-center justify-center">
-            <p className="mb-4 text-lg text-gray-400">
-              Your checklist is empty!
-            </p>
+          <div className="flex gap-3">
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="
-    rounded-xl border border-white/15
-    bg-white/5 px-6 py-2.5
-    text-sm text-gray-300
-    transition
-    hover:bg-white/10 hover:text-white
-  "
-              onClick={() => router.replace('/dashboard')}
+              onClick={() => router.replace("/dashboard")}
+              className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm text-gray-300 transition hover:bg-white/10 hover:text-white"
             >
-              ← Back to dashboard
+              ← Dashboard
             </motion.button>
 
-
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={handleLogout}
+              className="rounded-xl border border-red-500/30 px-4 py-2 text-sm text-red-400 transition hover:bg-red-500/10 hover:text-red-300"
+            >
+              Logout
+            </motion.button>
           </div>
-        ) : null}
-      </motion.div>
-    </div>
+        </header>
+
+        {/* Card */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          {isLoading && <GlobePage />}
+
+          {!isDataEmpty && !isLoading ? (
+            <div className="flex flex-col gap-6">
+              {id && <Checklist travelId={id} />}
+
+              {/* Actions */}
+              <div className="flex flex-wrap justify-center gap-4">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleClearList}
+                  className="rounded-xl border border-red-500/30 px-6 py-2.5 text-sm text-red-400 transition hover:bg-red-500/10 hover:text-red-300"
+                >
+                  🗑️ Delete all tasks
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleClearCompleted}
+                  className="rounded-xl border border-violet-500/40 bg-violet-600/10 px-6 py-2.5 text-sm text-violet-300 transition hover:bg-violet-600/20 hover:text-violet-200"
+                >
+                  ✅ Clear completed
+                </motion.button>
+              </div>
+            </div>
+          ) : !isLoading ? (
+            <div className="flex flex-col items-center justify-center py-16">
+              <p className="mb-4 text-lg text-gray-400">
+                Your checklist is empty!
+              </p>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => router.replace("/dashboard")}
+                className="rounded-xl border border-white/15 bg-white/5 px-6 py-2.5 text-sm text-gray-300 transition hover:bg-white/10 hover:text-white"
+              >
+                ← Back to dashboard
+              </motion.button>
+            </div>
+          ) : null}
+        </motion.section>
+      </div>
+    </main>
   );
 }
