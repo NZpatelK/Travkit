@@ -1,208 +1,130 @@
 "use client";
 
-import Checklist from "@/app/components/Checklist";
-import { useEffect, useState } from "react";
-import { clearAllData, seedDataIfEmpty } from "@/app/utils/seedData";
-import toast, { Toaster } from "react-hot-toast";
-import { allLists, resetIsCompleted } from "@/app/utils/supabase/client";
-import AddOnList from "@/app/components/AddOnList";
-import SearchableCountrySelect from "@/app/components/SearchableCountrySelect";
-import { Category, travelData } from "@/app/data/travelData";
-import TemplateCard from "@/app/components/TemplateCard";
-import { motion } from "framer-motion";
-import { useRefresh } from "@/app/context/RefreshContext";
-import GlobePage from "@/app/components/Globe";
-import { supabase } from "@/app/utils/supabase/client"; // <- Add Supabase client
+import React, { JSX, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { getAllTravelData } from "../utils/supabase/travel";
+import { motion } from "framer-motion";
+import { supabase } from "../utils/supabase/client";
 
-interface CountryOption {
-  value: string;
-  label: string;
+interface TravelProps {
+  travel_to: string;
+  id: number;
+  duration: number;
+  user_id: string;
 }
 
-export default function Dashboard() {
-  const [isDataEmpty, setIsDataEmpty] = useState(true);
-  const [AddOnListData, setAddOnListData] = useState<Category[]>([]);
-  const [inputDuration, setInputDuration] = useState<number | "">("");
-  const [selectedCountry, setSelectedCountry] = useState<CountryOption | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [user, setUser] = useState<any>(null);
-
-  const { triggerRefresh } = useRefresh();
+export default function TravelDashboard(): JSX.Element {
+  const [travelData, setTravelData] = useState<TravelProps[]>([]);
   const router = useRouter();
 
-  // ------------------------
-  // Auth Protection
-  // ------------------------
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data } = await supabase.auth.getUser();
-      if (!data.user) {
-        router.replace("/login"); // redirect if not logged in
-      } else {
-        setUser(data.user);
-      }
+    const fetchTravelData = async () => {
+      const data = await getAllTravelData();
+      if (data) setTravelData(data);
     };
-    checkAuth();
-  }, [router]);
-
-  // ------------------------
-  // Fetch checklist data
-  // ------------------------
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      const data = await allLists();
-      if (!data || data.length === 0) setIsDataEmpty(true);
-      else setIsDataEmpty(false);
-      setIsLoading(false);
-    };
-    fetchData();
+    fetchTravelData();
   }, []);
 
-  // ------------------------
-  // Handlers
-  // ------------------------
-  const handleClearList = async () => {
-    await clearAllData();
-    toast.success("List cleared!");
-    setAddOnListData([]);
-    setIsDataEmpty(true);
+  const createNewItem = () => {
+    router.push("/createTravelChecklist");
   };
 
-  const handleClearCompleted = async () => {
-    await resetIsCompleted();
-    triggerRefresh();
-    toast.success("Completed tasks cleared!");
-  };
-
-  const handleAddList = (category: Category) => {
-    setAddOnListData([...AddOnListData, category]);
-  };
-
-  const handleRemoveList = (title: string) => {
-    setAddOnListData(AddOnListData.filter((item) => item.title !== title));
-  };
-
-  const handleCreateList = async () => {
-    if (AddOnListData.length === 0) return toast.error("Please add at least one list");
-    if (!selectedCountry) return toast.error("Please select a country");
-    if (!inputDuration || inputDuration <= 1) return toast.error("Please enter a valid duration. Must be greater than 1.");
-
-    setIsLoading(true);
-    await seedDataIfEmpty(AddOnListData, selectedCountry?.label ?? "", inputDuration as number);
-    toast.success("List created!");
-    setAddOnListData([]);
-    setInputDuration("");
-    setSelectedCountry(null);
-    setIsDataEmpty(false);
-    setIsLoading(false);
+  const removeItem = (idx: number) => {
+    setTravelData((prev) => prev.filter((_, i) => i !== idx));
   };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    router.replace("/login");
+    router.replace("/");
   };
 
-  // ------------------------
-  // Render
-  // ------------------------
-  if (!user) return <GlobePage />; // show loader until auth is verified
-
   return (
-    <div className="h-screen flex flex-col">
-      <Toaster position="top-right" reverseOrder={true} />
+    <main className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0B0F1A] via-[#0E1325] to-[#0B0F1A] px-6 overflow-x-hidden">
+      {/* Ambient glow */}
+      <div className="absolute -top-40 -left-40 h-[28rem] w-[28rem] rounded-full bg-violet-500/10 blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-40 -right-40 h-[28rem] w-[28rem] rounded-full bg-violet-500/10 blur-3xl pointer-events-none" />
 
-      <div className="mx-10 mt-10 flex items-center justify-between">
-        <h1 className="text-3xl font-semibold">TravKit</h1>
-        <button
-          onClick={handleLogout}
-          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded shadow-md z-9999 cursor-pointer transition-colors duration-200"
-        >
-          Logout
-        </button>
-      </div>
+      {/* Centered Content */}
+      <div className="relative z-10 w-full max-w-2xl">
+        {/* Header */}
+        <header className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
+          <h1 className="text-4xl font-extrabold tracking-wide text-violet-400">
+            TRAVKIT
+          </h1>
 
-      {(!isDataEmpty && !isLoading) && (
-        <div className="flex-grow flex flex-col items-center justify-center">
-          <Checklist />
-          <div className="mt-2 flex gap-4">
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95, rotate: -2 }}
-              transition={{ duration: 0.25, ease: "easeInOut" }}
-              className="bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-3 rounded shadow-md transition-colors duration-200"
-              onClick={handleClearList}
-            >
-              Delete All Tasks
-            </motion.button>
+          <div className="flex gap-3">
 
             <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95, rotate: 2 }}
-              transition={{ duration: 0.25, ease: "easeInOut" }}
-              className="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-6 py-3 rounded shadow-md transition-colors duration-200"
-              onClick={handleClearCompleted}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={handleLogout}
+              className="rounded-xl border border-red-500/30 px-4 py-2 text-sm text-red-400 transition hover:bg-red-500/10 hover:text-red-300"
             >
-              Clear Completed
+              Logout
             </motion.button>
           </div>
-        </div>
-      )}
+        </header>
 
-      {isDataEmpty && !isLoading && (
-        <div>
-          <AddOnList isOpen={isDataEmpty}>
-            <h1 className="text-3xl font-bold text-neutral-800 text-center">Welcome to TravKit</h1>
-            <hr className="my-2 w-5/12 mx-auto text-neutral-300" />
-            <h2 className="text-sm font-semibold text-neutral-800 text-center">Create a checklist for your next trip</h2>
-
-            <div className="text-neutral-900 mt-5">
-              <div className="max-w-md mx-auto p-5 space-y-6">
-                <div className="flex flex-col">
-                  <label className="mb-2 text-gray-700 font-semibold">Travel To:</label>
-                  <SearchableCountrySelect setSelectedCountry={setSelectedCountry} selectedCountry={selectedCountry} />
-                </div>
-                <div className="flex flex-col">
-                  <label className="mb-2 text-gray-700 font-semibold">How Many Days?</label>
-                  <input
-                    type="number"
-                    placeholder="Enter number of days"
-                    className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    value={inputDuration}
-                    onChange={(e) => setInputDuration(parseInt(e.target.value))}
-                  />
-                </div>
-              </div>
-
-              <hr className="my-5 w-11/12 mx-auto text-neutral-300" />
-              <div>
-                <h2 className="text-center font-bold text-lg capitalize">Select a Checklist template to get started</h2>
-              </div>
-
-              <div className="flex flex-wrap justify-center gap-4 mt-5">
-                {travelData.categories.map((data, index) => (
-                  <TemplateCard key={index} category={data} handleAddList={handleAddList} handleRemoveList={handleRemoveList} />
-                ))}
-              </div>
+        {/* Card */}
+        <section className="rounded-2xl bg-white/5 p-6 shadow-xl ring-1 ring-white/10 backdrop-blur">
+          <header className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <h2 className="text-2xl font-semibold text-white">Checklist</h2>
+              <p className="text-sm text-gray-400">
+                No inputs, just a single button to add items.
+              </p>
             </div>
 
-            <div className="text-center">
-              <motion.button
-                className="bg-violet-600 text-white font-semibold w-10/12 py-3 rounded mt-5"
-                onClick={handleCreateList}
-                whileHover={{ scale: 1.05, backgroundColor: "#7c3aed" }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                Create Checklist
-              </motion.button>
-            </div>
-          </AddOnList>
-        </div>
-      )}
+            <button
+              onClick={createNewItem}
+              disabled={travelData.length >= 5}
+              className="rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-violet-600/30 transition hover:bg-violet-500 disabled:opacity-50"
+            >
+              + Create new item
+            </button>
+          </header>
 
-      {isLoading && <GlobePage />}
-    </div>
+          {/* List */}
+          {travelData.length === 0 ? (
+            <p className="py-10 text-center text-gray-300">
+              No items yet. Click “Create new item” to add one.
+            </p>
+          ) : (
+            <ul className="space-y-3 max-h-[60vh] overflow-y-auto">
+              {travelData.map((item, idx) => (
+                <li
+                  key={item.id}
+                  className="rounded-xl border border-white/10 bg-white/5 transition hover:bg-white/10"
+                >
+                  <Link
+                    href={`/dashboard/checklist/${item.id}`}
+                    className="flex items-center justify-between p-3"
+                  >
+                    <span className="text-white">{item.travel_to}</span>
+
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        removeItem(idx);
+                      }}
+                      className="rounded-md px-3 py-1 text-sm text-rose-500 transition hover:bg-white/10"
+                    >
+                      Remove
+                    </button>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {/* Footer */}
+          <footer className="mt-6 flex justify-between text-sm text-gray-400">
+            <span>Total items: {travelData.length}</span>
+            <span>Max items: 5</span>
+          </footer>
+        </section>
+      </div>
+    </main>
   );
 }

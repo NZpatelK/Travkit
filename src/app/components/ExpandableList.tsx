@@ -3,8 +3,11 @@
 import { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import List from './List';
-import { getCategoriesWithLists } from '../utils/supabase/client';
 import { useRefresh } from '../context/RefreshContext';
+import { PlusCircleIcon } from 'lucide-react';
+import toast from 'react-hot-toast';
+import { getCategoriesWithLists } from '../utils/supabase/categories';
+import { addNewItemToList } from '../utils/supabase/list';
 
 interface ExpandedState {
     [key: number]: boolean;
@@ -12,9 +15,11 @@ interface ExpandedState {
 
 interface ExpandableListProps {
     updatedProgress?: () => void;
+    travelId: string;
 }
 
-export default function ExpandableList({ updatedProgress }: ExpandableListProps) {
+export default function ExpandableList({ updatedProgress, travelId }: ExpandableListProps) {
+    const [inputNewItem, setInputNewItem] = useState('');
     const [expandedItems, setExpandedItems] = useState<ExpandedState>({});
     const [categoriesWithLists, setCategoriesWithLists] = useState<any[]>([]);
     const listRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -29,7 +34,7 @@ export default function ExpandableList({ updatedProgress }: ExpandableListProps)
     }, [refreshFlag]);
 
     const fetchCategoriesWithListsData = async () => {
-        const data = await getCategoriesWithLists();
+        const data = await getCategoriesWithLists(travelId);
         setCategoriesWithLists(data);
 
         if (updatedProgress) {
@@ -103,6 +108,21 @@ export default function ExpandableList({ updatedProgress }: ExpandableListProps)
         return totalCompleted;
     }
 
+    const handleAddNewItem = async (category_id: string) => {
+        if (inputNewItem.trim() === '') {
+            toast.error('Item title cannot be empty');
+            return;
+        }
+        addNewItemToList({ title: inputNewItem, category_id })
+        .then(() => {
+            fetchCategoriesWithListsData();
+        })
+        .catch((error) => {
+            toast.error('Error adding new item:', error);
+        });
+        setInputNewItem('');
+    }
+
     return (
         <div className="w-11/12 mx-auto my-4">
             {categoriesWithLists?.map((category, index) => (
@@ -134,6 +154,18 @@ export default function ExpandableList({ updatedProgress }: ExpandableListProps)
                             {category.list.map((listItem: any, i: number) => (
                                 <List key={listItem.id ?? i} {...listItem} updateData={fetchCategoriesWithListsData} />
                             ))}
+                            <div className="mx-auto my-4 mb-2 w-full overflow-hidden rounded border-2 border-neutral-200 flex items-center gap-2 px-2 focus-within:border-violet-600">
+                                <input
+                                    type="text"
+                                    value={inputNewItem}
+                                    onChange={(e) => setInputNewItem(e.target.value)}
+                                    placeholder="Add a New Item"
+                                    className="flex-1 bg-transparent py-2 pl-8 text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
+                                />
+                                <PlusCircleIcon className="text-violet-600 hover:text-violet-800 text-md font-normal tracking-wide w-8" onClick={() => handleAddNewItem(category.id)}/>
+                        
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -141,3 +173,4 @@ export default function ExpandableList({ updatedProgress }: ExpandableListProps)
         </div>
     );
 }
+

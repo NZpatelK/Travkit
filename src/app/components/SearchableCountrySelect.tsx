@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import Select, { SingleValue } from 'react-select';
 import { countries } from 'countries-list';
 import { getEmojiFlag } from 'countries-list';

@@ -2,6 +2,7 @@
 export interface Item {
   title: string;
   is_completed?: boolean;
+  is_deletable?: boolean;
   orderBy: number;
 }
 

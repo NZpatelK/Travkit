@@ -3,22 +3,26 @@ import Image from "next/image";
 import ProgressBar from "./ProgessBar";
 import ExpandableList from "./ExpandableList";
 import { useEffect, useState } from "react";
-import { allLists, getTravelDetail } from "../utils/supabase/client";
+import { getTravelDetail } from "../utils/supabase/travel";
+import { getAllListsByTravelId } from "../utils/supabase/list";
 
 interface travelProp {
     travel_to: string;
     duration: number;
 }
 
+type Props = {
+    travelId: string;
+};
 
-export default function Checklist() {
+export default function Checklist({ travelId }: Props) {
     const [totalCompletedLists, setTotalCompletedLists] = useState(0);
     const [travelDetails, setTravelDetails] = useState<travelProp | null>(null);
 
     useEffect(() => {
         const fetchTotalCompletedLists = async () => {
             await handleFetchTotalCompletedLists();
-            const data = await getTravelDetail() as travelProp | null;
+            const data = await getTravelDetail(travelId) as travelProp | null;
             if (data) {
                 setTravelDetails(data);
             }
@@ -28,7 +32,7 @@ export default function Checklist() {
     })
 
     const handleFetchTotalCompletedLists = async () => {
-        const data = await allLists();
+        const data = await getAllListsByTravelId(travelId) as any;
         const completedLists = data.filter((list: any) => list.is_completed);
         const completedListsLength = completedLists.length / data.length * 100;
         setTotalCompletedLists(completedListsLength);
@@ -56,7 +60,7 @@ export default function Checklist() {
                 </div>
             </div>
             <div className="flex flex-col mt-10 items-center w-full relative">
-                <ExpandableList updatedProgress={handleFetchTotalCompletedLists} />
+                <ExpandableList updatedProgress={handleFetchTotalCompletedLists} travelId={travelId} />
             </div>
         </div>
 

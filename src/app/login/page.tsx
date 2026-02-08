@@ -9,39 +9,62 @@ export default function LoginPage() {
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
-    setMessage("Sending magic link...");
+    setMessage("Sending link…");
 
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`
-      }
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
     });
 
     if (error) setMessage(error.message);
-    else setMessage("Check your email for the magic link!");
+    else setMessage("Check your email ✉️");
   }
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen">
-      <h1 className="text-2xl font-semibold mb-4">Login with Email</h1>
-      <form onSubmit={handleLogin} className="flex flex-col gap-3 w-72">
-        <input
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          required
-          onChange={(e) => setEmail(e.target.value)}
-          className="border p-2 rounded"
-        />
-        <button
-          type="submit"
-          className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
-        >
-          Send Magic Link
-        </button>
-      </form>
-      <p className="mt-4 text-sm text-gray-600">{message}</p>
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-[#0B0F1A] via-[#0E1325] to-[#0B0F1A] px-4">
+      {/* Ambient glow */}
+      <div className="absolute -top-40 -left-40 h-[28rem] w-[28rem] rounded-full bg-violet-500/10 blur-3xl" />
+      <div className="absolute -bottom-40 -right-40 h-[28rem] w-[28rem] rounded-full bg-violet-500/10 blur-3xl" />
+
+      <div className="relative z-10 w-full max-w-sm rounded-2xl bg-white/5 p-8 shadow-xl ring-1 ring-white/10 backdrop-blur">
+        <h1 className="text-center text-3xl font-semibold tracking-tight text-white">
+          Welcome to <span className="text-violet-400">TravKit</span>
+        </h1>
+
+        <p className="mt-2 text-center text-sm text-gray-400">
+          Sign in to access your travel checklist
+        </p>
+
+        <form onSubmit={handleLogin} className="mt-8 space-y-6">
+          <input
+            type="email"
+            placeholder="Email address"
+            value={email}
+            required
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full border-b border-white/15 bg-transparent py-2 text-sm text-white
+                       placeholder:text-gray-500 focus:border-violet-400 focus:outline-none transition"
+          />
+
+          <button
+            type="submit"
+            className="w-full rounded-xl bg-violet-600 py-2.5 text-sm font-semibold text-white
+                       shadow-lg shadow-violet-600/30 transition hover:bg-violet-500
+                       focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2
+                       focus:ring-offset-[#0B0F1A]"
+          >
+            Continue
+          </button>
+        </form>
+
+        {message && (
+          <p className="mt-6 text-center text-xs text-gray-400">
+            {message}
+          </p>
+        )}
+      </div>
     </main>
   );
 }
